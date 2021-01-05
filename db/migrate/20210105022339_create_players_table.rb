@@ -35,3 +35,4 @@ class CreatePlayersTable < ActiveRecord::Migration[5.2]
     end
   end
 end
+
