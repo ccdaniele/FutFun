@@ -28,7 +28,6 @@ ActiveRecord::Schema.define(version: 2021_01_05_032221) do
     t.string "name"
     t.string "nationality"
     t.integer "club_id"
-    t.string "club"
   end
 
 end
