@@ -5,7 +5,6 @@ require 'net/http'
 require 'openssl'
 require 'json'
 
-
 def call(url)
     http = Net::HTTP.new(url.host, url.port)
     http.use_ssl = true
@@ -17,41 +16,46 @@ def call(url)
     JSON(response.read_body)
 end
 
-def call_league
+def call_league    #epl, 2019
     url = URI("https://v3.football.api-sports.io/teams?league=39&season=2019")
     call(url)
 end
 
-def call_team
+def call_team    #2019
     url = URI("https://v3.football.api-sports.io/players?season=2019&league=39&team=#{n}")
     call(url)
 end
 
-def find_or_create_club(club)
+def epl_by_season(season)
+    url = URI("https://v3.football.api-sports.io/teams?league=39&season=#{season}")
+    call(url)
 end
 
 def create_player(club, url)
         call(url)["response"].map do |player|
         name = player["player"]["name"]
-        nationality = player["player"]["Nationality"]
+        nationality = player["player"]["nationality"]
+        #number = ["statistics"][0]["games"]["number"]
+        # position = ["statistics"][0]["games"]["position"]
         club_id = club.id
-        player = Player.create({name: name, nationality: nationality, club_id: club_id})
+        # age = player["player"]["age"]
+        player = Player.create(name: name, nationality: nationality, club_id: club_id)
     end
 end
 
-def populate_league
+def populate_league(season)    #league, season
     league = League.create(name: "EPL")
-    call_league["response"].map do |team|   
-        name = team["team"]["name"]
-        country = team["team"]["country"]
-        founded = team["team"]["founded"]
+    x = epl_by_season(season)
+    x["response"].map do |club|   
+        name = club["team"]["name"]
+        country = club["team"]["country"]
+        founded = club["team"]["founded"]
         league_id = league.id
-        n = team["team"]["id"]
-        club = Club.create(name: name, country: country, league_id: league_id)
+        n = club["team"]["id"]
+        new_club = Club.create(name: name, country: country, league_id: league_id)
         url = URI("https://v3.football.api-sports.io/players?season=2019&league=39&team=#{n}")
-        create_player(club, url)
+        create_player(new_club, url)
     end
 end
-
 
 binding.pry  
