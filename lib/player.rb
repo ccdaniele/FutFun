@@ -1,4 +1,4 @@
 class Player < ActiveRecord::Base 
-    Belongs_to :club
+    belongs_to :club
 
 end

@@ -10,7 +10,18 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_01_05_022519) do
+ActiveRecord::Schema.define(version: 2021_01_05_032221) do
+
+  create_table "clubs", force: :cascade do |t|
+    t.string "name"
+    t.integer "league_id"
+    t.integer "season"
+    t.string "country"
+  end
+
+  create_table "leagues", force: :cascade do |t|
+    t.string "name"
+  end
 
   create_table "players", force: :cascade do |t|
     t.string "name"
@@ -19,14 +30,15 @@ ActiveRecord::Schema.define(version: 2021_01_05_022519) do
     t.integer "height"
     t.integer "weight"
     t.integer "team_id"
-    t.integer "appearance"
+    t.string "club"
+    t.integer "appearances"
     t.integer "minutes"
     t.string "position"
     t.float "rating"
     t.integer "shots"
     t.integer "shots_on_target"
     t.integer "goals"
-    t.integer "assist"
+    t.integer "assists"
     t.integer "tackles"
     t.integer "blocks"
     t.integer "interceptions"
@@ -41,7 +53,7 @@ ActiveRecord::Schema.define(version: 2021_01_05_022519) do
     t.integer "penalties_won"
     t.integer "penalties_committed"
     t.integer "penalties_scored"
-    t.integer "pensalties_missed"
+    t.integer "penalties_missed"
     t.integer "penalties_saved"
   end
 
