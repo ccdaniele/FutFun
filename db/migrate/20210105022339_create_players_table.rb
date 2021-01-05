@@ -6,8 +6,7 @@ class CreatePlayersTable < ActiveRecord::Migration[5.2]
       t.string :nationality
       # t.integer :height
       # t.integer :weight
-      # t.integer :team_id
-      t.string :club
+      t.integer :club_id
       # t.integer :appearances 
       # t.integer :minutes
       # t.string :position

@@ -10,11 +10,12 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_01_05_145100) do
+ActiveRecord::Schema.define(version: 2021_01_05_032221) do
 
   create_table "clubs", force: :cascade do |t|
     t.string "name"
     t.integer "league_id"
+    t.integer "player_id"
     t.integer "season"
     t.string "country"
   end
@@ -25,42 +26,9 @@ ActiveRecord::Schema.define(version: 2021_01_05_145100) do
 
   create_table "players", force: :cascade do |t|
     t.string "name"
-    t.integer "age"
     t.string "nationality"
-    t.integer "height"
-    t.integer "weight"
-    t.integer "team_id"
+    t.integer "club_id"
     t.string "club"
-    t.integer "appearances"
-    t.integer "minutes"
-    t.string "position"
-    t.float "rating"
-    t.integer "shots"
-    t.integer "shots_on_target"
-    t.integer "goals"
-    t.integer "assists"
-    t.integer "tackles"
-    t.integer "blocks"
-    t.integer "interceptions"
-    t.integer "duels"
-    t.integer "duels_won"
-    t.integer "dribbles_attempted"
-    t.integer "dribbles_successful"
-    t.integer "fouls_drawn"
-    t.integer "fouls_committed"
-    t.integer "yellow_cards"
-    t.integer "red_cards"
-    t.integer "penalties_won"
-    t.integer "penalties_committed"
-    t.integer "penalties_scored"
-    t.integer "penalties_missed"
-    t.integer "penalties_saved"
-    t.integer "number"
-    t.integer "goals_conceded"
-    t.integer "goals_saved"
-    t.integer "passes"
-    t.float "pass_accuracy"
-    t.integer "season"
   end
 
 end
