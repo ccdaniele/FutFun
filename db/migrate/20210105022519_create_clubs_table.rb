@@ -6,6 +6,7 @@ class CreateClubsTable < ActiveRecord::Migration[5.2]
       t.integer :player_id
       t.integer :season
       t.string :country
+      t.integer :founded
     end
   end
 end

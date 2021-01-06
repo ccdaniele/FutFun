@@ -15,19 +15,20 @@ ActiveRecord::Schema.define(version: 2021_01_05_032221) do
   create_table "clubs", force: :cascade do |t|
     t.string "name"
     t.integer "league_id"
-    t.integer "player_id"
     t.integer "season"
     t.string "country"
   end
 
   create_table "leagues", force: :cascade do |t|
     t.string "name"
+    t.integer "league_id"
   end
 
   create_table "players", force: :cascade do |t|
+    t.integer "player_id"
+    t.integer "club_id"
     t.string "name"
     t.string "nationality"
-    t.integer "club_id"
   end
 
 end
