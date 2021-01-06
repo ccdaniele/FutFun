@@ -32,7 +32,7 @@ def call_team
     call(URI("https://v3.football.api-sports.io/players?season=2019&league=39&team=50"))
 end
 
-def call_team_players(season, league, team)
+def call_team_players(league, season, team)
     call(URI("https://v3.football.api-sports.io/players?season=#{season}&league=#{league}&team=#{team}"))
 end
 
@@ -166,8 +166,14 @@ def create_club_ids(league, season)
         founded = team["team"]["founded"]
         stadium = team["venue"]["name"]
         city = team["venue"]["city"]
-        new_club = Club.create(club_id: club_id, name: name, country: country, founded: founded, stadium: stadium, city: city)
-        end
+         if !Club.find(club_id)
+            new_club = Club.create(club_id: club_id, name: name, country: country, founded: founded, stadium: stadium, city: city)
+         else
+            system "clear" 
+            "#{name} is already a registered club!"
+            system "clear" 
+         end
+    end
 end 
 
 def create_clubs_ids_across_leagues(league_array, season)
@@ -188,16 +194,28 @@ def create_player_ids
         name = player["player"]["name"]
         nationality = player["player"]["nationality"]
         player_id = player["player"]["id"]
-        if !Player.find(player_id)
-            player = Player.create(player_id: player_id, name: name, nationality: nationality)
-        else 
-            "Already registered player!"
+            Player.find_or_create_by(player_id: player_id, name: name, nationality: nationality)
+    end
+end
+
+def create_player_ids_across_league_for_a_season(league, season)
+    x = call_custom_league(league, season)
+    x["response"].each do |club|
+        team = club["team"]["id"]
+        players = call_team_players(league, season, team)
+        players["response"].each do |player|
+            name = player["player"]["name"]
+            nationality = player["player"]["nationality"]
+            player_id = player["player"]["id"]
+              Player.find_or_create_by(player_id: player_id, name: name, nationality: nationality)
         end
     end
 end
 
-def create_player_ids_across_league(league, season)
-    x = call_team_players(season, league, team)
+def create_player_ids_across_season_for_array_of_leagues(league_array, season)
+    league_array.each do |league| 
+        create_player_ids_across_league_for_a_season(league, season)
+    end
 end
 
 def create_leagues_ids
