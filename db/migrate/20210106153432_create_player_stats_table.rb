@@ -2,11 +2,11 @@ class CreatePlayerStatsTable < ActiveRecord::Migration[5.2]
   
   def change
 
-    create_table :player_stats, {id: false} do |t|
-      t.integer :season
+    create_table :player_stats do |t|
       t.integer :player_id
-      t.integer :club_id
+      t.integer :season
       t.string :name
+      t.integer :club_id      
       t.integer :age
       t.integer :height
       t.integer :weight
@@ -17,7 +17,11 @@ class CreatePlayerStatsTable < ActiveRecord::Migration[5.2]
       t.integer :shots
       t.integer :shots_on_target
       t.integer :goals
+      t.integer :goals_conceded
+      t.integer :goals_saved
       t.integer :assists
+      t.integer :passes
+      t.integer :pass_accuracy
       t.integer :tackles
       t.integer :blocks
       t.integer :interceptions
@@ -38,4 +42,3 @@ class CreatePlayerStatsTable < ActiveRecord::Migration[5.2]
     end
   end
 end
-

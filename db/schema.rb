@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_01_06_153432) do
+ActiveRecord::Schema.define(version: 2021_01_06_221646) do
 
   create_table "clubs", id: false, force: :cascade do |t|
     t.integer "club_id"
@@ -28,11 +28,11 @@ ActiveRecord::Schema.define(version: 2021_01_06_153432) do
     t.integer "stats_since"
   end
 
-  create_table "player_stats", id: false, force: :cascade do |t|
-    t.integer "season"
+  create_table "player_stats", force: :cascade do |t|
     t.integer "player_id"
-    t.integer "club_id"
+    t.integer "season"
     t.string "name"
+    t.integer "club_id"
     t.integer "age"
     t.integer "height"
     t.integer "weight"
@@ -43,7 +43,11 @@ ActiveRecord::Schema.define(version: 2021_01_06_153432) do
     t.integer "shots"
     t.integer "shots_on_target"
     t.integer "goals"
+    t.integer "goals_conceded"
+    t.integer "goals_saved"
     t.integer "assists"
+    t.integer "passes"
+    t.integer "pass_accuracy"
     t.integer "tackles"
     t.integer "blocks"
     t.integer "interceptions"
@@ -66,6 +70,9 @@ ActiveRecord::Schema.define(version: 2021_01_06_153432) do
     t.integer "player_id"
     t.string "name"
     t.string "nationality"
+  end
+
+  create_table "seasons", primary_key: "season", force: :cascade do |t|
   end
 
 end

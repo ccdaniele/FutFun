@@ -50,14 +50,16 @@ def call_team_stats(team, league, season)    #incomplete
     call(URI("https://v3.football.api-sports.io/teams/statistics?league=#{l}&team=#{t}&season=#{season}"))
 end
 
-def call_club_ucl_record(season, club_name)   #needs to be tested
+def call_club_ucl_record_by_name(season, club_name)
     club = find_a_club(club_name)
     id = club.club_id 
     call(URI("https://v3.football.api-sports.io/teams/statistics?season=#{season}&team=#{id}&league=2"))
 end
 
-def call_club_uel_record(season, club)   #needs team_selection and error for teams not in uel
-    call(URI("https://v3.football.api-sports.io/teams/statistics?season=#{season}&team=#{club}&league=3"))
+def call_club_uel_record_by_name(season, club_name)
+    club = find_a_club(club_name)
+    id = club.club_id 
+    call(URI("https://v3.football.api-sports.io/teams/statistics?season=#{season}&team=#{id}&league=3"))
 end
 
 def call_league_and_season(league, season)
@@ -125,7 +127,6 @@ def destroy_all
     Player.destroy_all
     League.destroy_all
 end
-
 
 def create_player(club, url)
     url = URI("https://v3.football.api-sports.io/players?season=2019&league=39&team=50")
@@ -226,13 +227,8 @@ def create_leagues_ids
         name = league["league"]["name"]
         country = league["country"]["name"]
         stats_since = league["seasons"][0]["year"]
-        if !League.find(league_id)
-            new_league = League.create(league_id: league_id, name: name, country: country, stats_since: stats_since)
-        else
-            "Already a league!"
-        end
+        League.find_or_create_by(league_id: league_id, name: name, country: country, stats_since: stats_since)
     end
-    
 end
 
 def seed_database_with_ids
@@ -240,6 +236,55 @@ def seed_database_with_ids
     create_clubs_ids_across_seasons_and_leagues(league_array, seasons)
     #create_player_ids
 end
+
+
+def player_season(player_id)
+    player_stats = call_player(player_id)
+    player_id = player_stats["parameters"]["id"]
+    season = player_stats["parameters"]["season"]
+    name = player_stats["response"][0]["player"]["name"]
+    club_id = player_stats["response"][0]["statistics"][0]["team"]["id"]
+    age = player_stats["response"][0]["player"]["age"]
+    height = player_stats["response"][0]["player"]["height"]
+    weight = player_stats["response"][0]["player"]["weight"]
+    appearances =  player_stats["response"][0]["statistics"][0]["games"]["appearences"]
+    minutes =  player_stats["response"][0]["statistics"][0]["games"]["minutes"]
+    position =  player_stats["response"][0]["statistics"][0]["games"]["position"]
+    rating =  player_stats["response"][0]["statistics"][0]["games"]["rating"]
+    shots =  player_stats["response"][0]["statistics"][0]["shots"]["total"]
+    shots_on_target =  player_stats["response"][0]["statistics"][0]["shots"]["on"]
+    goals =  player_stats["response"][0]["statistics"][0]["goals"]["total"]
+    goals_conceded =  player_stats["response"][0]["statistics"][0]["goals"]["conceded"]
+    goals_saved =  player_stats["response"][0]["statistics"][0]["goals"]["saves"]
+    assists =  player_stats["response"][0]["statistics"][0]["goals"]["assists"]
+    passes =  player_stats["response"][0]["statistics"][0]["passes"]["total"]
+    pass_accuracy =  player_stats["response"][0]["statistics"][0]["passes"]["accuracy"]
+    tackles =  player_stats["response"][0]["statistics"][0]["tackles"]["total"]
+    blocks =  player_stats["response"][0]["statistics"][0]["tackles"]["blocks"]
+    interceptions =  player_stats["response"][0]["statistics"][0]["tackles"]["interceptions"]
+    duels =  player_stats["response"][0]["statistics"][0]["duels"]["total"]
+    duels_won =  player_stats["response"][0]["statistics"][0]["duels"]["won"]
+    dribbles_attempted =  player_stats["response"][0]["statistics"][0]["dribbles"]["attempts"]
+    dribbles_successful =  player_stats["response"][0]["statistics"][0]["dribbles"]["success"]
+    fouls_drawn =  player_stats["response"][0]["statistics"][0]["fouls"]["drawn"]
+    fouls_committed =  player_stats["response"][0]["statistics"][0]["fouls"]["committed"]
+    yellow_cards =  player_stats["response"][0]["statistics"][0]["cards"]["yellow"]
+    red_cards =  player_stats["response"][0]["statistics"][0]["cards"]["red"]
+    penalties_won =  player_stats["response"][0]["statistics"][0]["penalty"]["won"]
+    penalties_committed =  player_stats["response"][0]["statistics"][0]["penalty"]["committed"]
+    penalties_scored =  player_stats["response"][0]["statistics"][0]["penalty"]["scored"]
+    penalties_missed =  player_stats["response"][0]["statistics"][0]["penalty"]["missed"]
+    penalties_saved =  player_stats["response"][0]["statistics"][0]["penalty"]["saved"]
+    PlayerStats.create(player_id: "#{player_id}", season: "#{season}", name: "#{name}", club_id: "#{club_id}", age: "#{age}", height: "#{height}", weight: "#{weight}", appearances: "#{appearances}", minutes: "#{minutes}", position: "#{position}", rating: "#{rating}", shots: "#{shots}", shots_on_target: "#{shots_on_target}", goals: "#{goals}", goals_conceded: "#{goals_conceded}", goals_saved: "#{goals_saved}", assists: "#{assists}", passes: "#{passes}", pass_accuracy: "#{pass_accuracy}", tackles: "#{tackles}", blocks: "#{blocks}", interceptions: "#{interceptions}", duels: "#{duels}", duels_won: "#{duels_won}", dribbles_attempted: "#{dribbles_attempted}", dribbles_successful: "#{dribbles_successful}", fouls_drawn: "#{fouls_drawn}", fouls_committed: "#{fouls_committed}", yellow_cards: "#{yellow_cards}", red_cards: "#{red_cards}", penalties_won: "#{penalties_won}", penalties_committed: "#{penalties_committed}", penalties_scored: "#{penalties_scored}", penalties_missed: "#{penalties_missed}", penalties_saved: "#{penalties_saved}")
+    end
+
+    def create_seasons
+        year = 2011
+        while year < 2019 do
+        season = Season.create(season: "#{year}")
+        year += 1
+        end
+    end
 
 
 binding.pry
