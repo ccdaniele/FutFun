@@ -1,6 +1,7 @@
 class CreateClubsTable < ActiveRecord::Migration[5.2]
   def change
-    create_table :clubs do |t|
+    create_table :clubs, {id: false} do |t|
+      t.integer :club_id
       t.string :name
       t.integer :league_id
       t.integer :player_id

@@ -12,19 +12,22 @@
 
 ActiveRecord::Schema.define(version: 2021_01_05_032221) do
 
-  create_table "clubs", force: :cascade do |t|
+  create_table "clubs", id: false, force: :cascade do |t|
+    t.integer "club_id"
     t.string "name"
     t.integer "league_id"
+    t.integer "player_id"
     t.integer "season"
     t.string "country"
+    t.integer "founded"
   end
 
   create_table "leagues", force: :cascade do |t|
-    t.string "name"
     t.integer "league_id"
+    t.string "name"
   end
 
-  create_table "players", force: :cascade do |t|
+  create_table "players", id: false, force: :cascade do |t|
     t.integer "player_id"
     t.integer "club_id"
     t.string "name"
