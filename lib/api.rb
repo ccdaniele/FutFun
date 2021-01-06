@@ -5,13 +5,15 @@ require 'net/http'
 require 'openssl'
 require 'json'
 
+class Api
+
 def call(url)
     http = Net::HTTP.new(url.host, url.port)
     http.use_ssl = true
     http.verify_mode = OpenSSL::SSL::VERIFY_NONE
     request = Net::HTTP::Get.new(url)
     request["x-rapidapi-host"] = 'v3.football.api-sports.io'
-    request["x-rapidapi-key"] = '8b937051139da77bba6b2a445b095d62'
+    request["x-rapidapi-key"] = '8c78b34553ee9daa9b38805f456cdadb'
     response = http.request(request)
     JSON(response.read_body)
 end
@@ -57,5 +59,6 @@ def populate_league(season)    #league, season
         create_player(new_club, url)
     end
 end
+end 
 
 binding.pry  
