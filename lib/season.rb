@@ -1,12 +1,13 @@
-class Season 
+class Season < ActiveRecord::Base
 
-def select_season
+    self.primary_key = "season"
 
-    request_season = epl_by_season(season)
-
-
-end
-
-
-
+    has_many :league
+    has_many :teams
+    has_many :teams, through: :leagues
+    has_many :team_datas, through: :teams
+    has_many :players
+    has_many :players, through: :teams
+    has_many :players_stats, through: :players
+    
 end
