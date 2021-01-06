@@ -15,14 +15,13 @@ ActiveRecord::Schema.define(version: 2021_01_06_153432) do
   create_table "clubs", id: false, force: :cascade do |t|
     t.integer "club_id"
     t.string "name"
-    t.integer "league_id"
-    t.integer "player_id"
-    t.integer "season"
     t.string "country"
     t.integer "founded"
+    t.string "stadium"
+    t.string "city"
   end
 
-  create_table "leagues", force: :cascade do |t|
+  create_table "leagues", id: false, force: :cascade do |t|
     t.integer "league_id"
     t.string "name"
     t.string "country"
