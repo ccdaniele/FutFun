@@ -29,7 +29,11 @@ def call_custom_league(league, season)
 end
 
 def call_team
-    call(URI("https://v3.football.api-sports.io/players?season=2019&league=39&team=#{n}"))
+    call(URI("https://v3.football.api-sports.io/players?season=2019&league=39&team=50"))
+end
+
+def call_team_players(season, league, team)
+    call(URI("https://v3.football.api-sports.io/players?season=#{season}&league=#{league}&team=#{team}"))
 end
 
 def call_player(id)
@@ -39,8 +43,6 @@ end
 def call_clubs_in_a_league(league, season)
     call(URI("https://v3.football.api-sports.io/teams?league=#{league}&season=#{season}"))
 end
-
-  
 
 def call_team_stats(team, league, season)    #incomplete
     l = league_selection(league)
@@ -174,14 +176,28 @@ def create_clubs_ids_across_leagues(league_array, season)
     end
 end
 
-def create_clubs_ids_across_seasons(league_array, season)
-    season.each do |season|
+def create_clubs_ids_across_seasons_and_leagues(league_array, seasons)
+    seasons.each do |season|
         create_clubs_ids_across_leagues(league_id, season)
     end
 end  
 
 def create_player_ids
+    x = call_team   #manchester city 2019
+    x["response"].map do |player|
+        name = player["player"]["name"]
+        nationality = player["player"]["nationality"]
+        player_id = player["player"]["id"]
+        if !Player.find(player_id)
+            player = Player.create(player_id: player_id, name: name, nationality: nationality)
+        else 
+            "Already registered player!"
+        end
+    end
+end
 
+def create_player_ids_across_league(league, season)
+    x = call_team_players(season, league, team)
 end
 
 def create_leagues_ids
@@ -192,15 +208,18 @@ def create_leagues_ids
         name = league["league"]["name"]
         country = league["country"]["name"]
         stats_since = league["seasons"][0]["year"]
-        new_league = League.create(league_id: league_id, name: name, country: country, stats_since: stats_since)
+        if !League.find(league_id)
+            new_league = League.create(league_id: league_id, name: name, country: country, stats_since: stats_since)
+        else
+            "Already a league!"
+        end
     end
     
 end
 
-
 def seed_database_with_ids
     create_leagues_ids
-    create_club_ids
+    create_clubs_ids_across_seasons_and_leagues(league_array, seasons)
     #create_player_ids
 end
 
