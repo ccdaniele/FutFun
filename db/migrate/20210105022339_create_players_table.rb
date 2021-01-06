@@ -1,8 +1,7 @@
 class CreatePlayersTable < ActiveRecord::Migration[5.2]
   def change
-    create_table :players do |t|
+    create_table :players, {id: false} do |t|
       t.integer :player_id
-      t.integer :club_id
       t.string :name
       t.integer :age
       t.string :nationality
@@ -38,6 +37,7 @@ class CreatePlayersTable < ActiveRecord::Migration[5.2]
   end
 end
 
+<<<<<<< HEAD
 # t.string :name
 # t.integer :age
 # t.string :nationality
@@ -68,3 +68,5 @@ end
 # t.integer :penalties_scored
 # t.integer :penalties_missed
 # t.integer :penalties_saved
+=======
+>>>>>>> 7ebda54470bbb5f73775e0b7c0ece34482ef6c64

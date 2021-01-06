@@ -1,22 +1,7 @@
 class Club < ActiveRecord::Base
     has_many :players
     belongs_to :league
-
-def select_season 
-
     
-
-end
-
-
-
-
-
-
-
-
-
-
-
-
+    self.primary_key = "club_id"
+    
 end
