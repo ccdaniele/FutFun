@@ -10,27 +10,15 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-<<<<<<< HEAD
 ActiveRecord::Schema.define(version: 2021_01_06_165909) do
-=======
-ActiveRecord::Schema.define(version: 2021_01_06_153432) do
->>>>>>> 7ebda54470bbb5f73775e0b7c0ece34482ef6c64
 
   create_table "clubs", id: false, force: :cascade do |t|
     t.integer "club_id"
     t.string "name"
-<<<<<<< HEAD
-    t.integer "league_id"
-    t.integer "player_id"
-    t.integer "season"
-    t.string "country"
-    t.integer "founded"
-=======
     t.string "country"
     t.integer "founded"
     t.string "stadium"
     t.string "city"
->>>>>>> 7ebda54470bbb5f73775e0b7c0ece34482ef6c64
   end
 
   create_table "leagues", id: false, force: :cascade do |t|
@@ -46,8 +34,6 @@ ActiveRecord::Schema.define(version: 2021_01_06_153432) do
     t.integer "club_id"
     t.string "name"
     t.integer "age"
-<<<<<<< HEAD
-=======
     t.integer "height"
     t.integer "weight"
     t.integer "appearances"
@@ -79,10 +65,11 @@ ActiveRecord::Schema.define(version: 2021_01_06_153432) do
   create_table "players", id: false, force: :cascade do |t|
     t.integer "player_id"
     t.string "name"
->>>>>>> 7ebda54470bbb5f73775e0b7c0ece34482ef6c64
+    t.integer "age"
     t.string "nationality"
     t.integer "height"
     t.integer "weight"
+    t.integer "club_id"
     t.integer "appearances"
     t.integer "minutes"
     t.string "position"

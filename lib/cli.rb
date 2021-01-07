@@ -1,4 +1,4 @@
-class CLI
+class CLI < ActiveRecord::Base
     def run
       sign_in
       home
@@ -70,7 +70,7 @@ class CLI
           when "1"
             my_players
           when "2"
-            player_search
+            find_a_new_player
           when "Q" || "QUIT"
           when "R" || "RESTART"
             run
@@ -86,11 +86,23 @@ class CLI
             def my_players
               clear_terminal
               #create template 
-              User.players.map{|u|u.name} 
+              puts "#{User.players.map{|u|u.name}}"
 
               divider
-
             end
+
+            def find_a_new_player
+              clear_terminal
+              puts "Enter the name of the player"
+              query = get_user_input
+              player_info = find_a_player_by_name(name: query)
+              # puts "#{player_info.name} is a great #{player_info.position} who plays in #{player_info.club_id} and has score #{player_info.goals} playing #{player_info.minutes} minutes this season"
+              #  puts "#{player_info.name} had comitted #{player_info.fouls_commited} fouls and has #{player_info.yellow_cards} yellow cards and #{player_info.red_cards}"
+               divider
+            end
+
+            
+            #binding.pry
           
               
 

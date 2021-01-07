@@ -4,5 +4,7 @@ class Player < ActiveRecord::Base
     
     belongs_to :club
     has_many :player_stats
-    
+    Player.all
 end
+
+binding.pry
