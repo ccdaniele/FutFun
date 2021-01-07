@@ -1,3 +1,4 @@
+
 class CLI 
     def run
       sign_in
@@ -102,8 +103,6 @@ class CLI
                
             end
 
-
-
   
     # def playing_now
     #   clear_terminal
@@ -155,3 +154,4 @@ class CLI
       pause
     end
   end
+

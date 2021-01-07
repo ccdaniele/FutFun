@@ -1,9 +1,4 @@
-require_relative 'config/environment.rb'
-require 'pry'
-require 'uri'
-require 'net/http'
-require 'openssl'
-require 'json'
+require_relative 'config/environment'
 
 def find_a_players_team_by_name(player) 
     if Player.find_by(name: "#{player}")
