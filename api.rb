@@ -155,7 +155,7 @@ def create_leagues_ids        #populates with leagues, their ids and basic data
     end
 end
 
-def create_all(league_array, seasons)
+def create_all(league_array, seasons)    #works! 
     seasons.each do |year|
         season = year
         league_array.each do |table|
