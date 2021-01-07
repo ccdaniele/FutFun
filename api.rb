@@ -90,33 +90,20 @@ def call(url)
     JSON(response.read_body)
 end
 
-def call_league
-    call(URI("https://v3.football.api-sports.io/teams?league=39&season=2014"))
+def call_league(league, season)     #basic team data, teams in a league for a season
+    call(URI("https://v3.football.api-sports.io/teams?league=#{league}&season=#{season}"))
 end
 
 def call_league_by_id(id, season)
     call(URI("https://v3.football.api-sports.io/teams?league=#{id}&season=#{season}"))
 end
 
-def assign_leagues_seasons(league)
-
-end
-    
-def create_league_across_seasons(league)
-    season = 2011
-    while season < 2019 do
-
-        call_league_by_id(league)
-        league.eason = season
-    end
-end
-
 def call_custom_league(league, season)
     call(URI("https://v3.football.api-sports.io/teams?league=#{league}&season=#{season}"))
 end
 
-def call_team
-    call(URI("https://v3.football.api-sports.io/players?season=2019&league=39&team=50"))
+def call_team(league, club, season)   #could populate both teams and players with data across a league
+    call(URI("https://v3.football.api-sports.io/players?season=#{season}&league=#{league}&team=#{club}"))
 end
 
 def call_team_players(league, season, team)
@@ -125,24 +112,6 @@ end
 
 def call_player(id, season)
     call(URI("https://v3.football.api-sports.io/players?id=#{id}&season=#{season}"))
-end
-
-def call_club_ucl_record_by_name(season, club_name)
-    club = find_a_club(club_name)
-    id = club.club_id 
-    call(URI("https://v3.football.api-sports.io/teams/statistics?season=#{season}&team=#{id}&league=2"))
-end
-
-def call_club_uel_record_by_name(season, club_name)
-    club = find_a_club(club_name)
-    id = club.club_id 
-    call(URI("https://v3.football.api-sports.io/teams/statistics?season=#{season}&team=#{id}&league=3"))
-end
-
-def call_league_and_season(league, season)
-    l = league_selection(league)
-    url = URI("https://v3.football.api-sports.io/leagues?season=#{season}&id=#{l}")
-    call(url)
 end
 
   #           <--------database methods------->
@@ -201,7 +170,7 @@ end
 
 def create_all(league_array, season)
     create_leagues_ids
-    create_teams_across_leagues(league_array, season)
+    create_leagues_clubs(league_array, season)
     create_players_across_leagues(league_array, season)
     create_club_stats_across_leagues(league_array, season)
 end
