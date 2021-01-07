@@ -5,7 +5,79 @@ require 'net/http'
 require 'openssl'
 require 'json'
 
-                    
+def find_a_players_team_by_name(player) 
+    if Player.find_by(name: "#{player}")
+        Player.find_by(name: "#{player}").club.name
+    else
+        puts "Sorry, we cannot find your player!"
+    end
+end
+
+def find_a_player_by_name(name)
+    id = Player.find_by(name: "#{name}").player_id
+    call_player(id)
+end
+
+def find_a_club(club_name) 
+    Club.find_by(name: "#{club_name}")
+end
+
+def call_custom_league(league, season)
+    call(URI("https://v3.football.api-sports.io/teams?league=#{league}&season=#{season}"))
+end
+
+def call_team
+    call(URI("https://v3.football.api-sports.io/players?season=2019&league=39&team=50"))
+end
+
+def call_team_players(league, season, team)
+    call(URI("https://v3.football.api-sports.io/players?season=#{season}&league=#{league}&team=#{team}"))
+end
+
+def call_player(id, season)
+    call(URI("https://v3.football.api-sports.io/players?id=#{id}&season=#{season}"))
+end
+
+def call_team_stats(team, league, season)    #incomplete
+    l = league_selection(league)
+    t = team_selection(team)  #need team_selection method based on league
+    call(URI("https://v3.football.api-sports.io/teams/statistics?league=#{l}&team=#{t}&season=#{season}"))
+end
+
+def call_league_and_season(league, season)
+    l = league_selection(league)
+    url = URI("https://v3.football.api-sports.io/leagues?season=#{season}&id=#{l}")
+    call(url)
+end
+
+def call_league
+    call(URI("https://v3.football.api-sports.io/teams?league=39&season=2014"))
+end
+
+def call_league_by_id(id, season)
+    call(URI("https://v3.football.api-sports.io/teams?league=#{id}&season=#{season}"))
+end
+
+
+def seed_league_teams_and_players(league, season)     #populates with a league, its teams with basic data, and their players' ids and basic data by season
+    x = call_custom_league(league, season)
+    x["response"].map do |team|
+        club_id = team["team"]["id"]
+        name = team["team"]["name"]
+        country = team["team"]["country"]
+        founded = team["team"]["founded"]
+        stadium = team["venue"]["name"]
+        city = team["venue"]["city"]
+        new_club = Club.find_or_create_by(club_id: club_id, name: name, country: country, founded: founded, stadium: stadium, city: city)
+        url = URI("https://v3.football.api-sports.io/players?season=#{season}&league=#{league}&team=#{club_id}")
+        create_players_from_team(new_club, url)
+    end
+end
+
+
+
+#-------  older methods-----
+
   #           <--------api methods------->
 
 
@@ -90,7 +162,7 @@ league_array = [39, 140, 78, 61, 135, 253]
 seasons = [2017, 2018, 2019]
 
 def league_selection(league)
-    if league == "EPL"
+    if league == "Premier League"
         l = 39
     elsif league == "140"
         league == "La Liga"
@@ -107,12 +179,6 @@ def league_selection(league)
     elsif
         league == "MLS"
         l = 253
-    elsif
-        league == "Champions League"
-        l = 2
-    elsif
-        league == "Europa League"
-        l = 3
     end
     l
 end
@@ -143,6 +209,12 @@ def destroy_all
     League.destroy_all
 end
 
+def create_all(league_array, season)
+    create_leagues_ids
+    create_teams_across_leagues(league_array, season)
+    create_players_across_leagues(league_array, season)
+end
+
 def create_leagues_ids        #populates with leagues, their ids and basic data
     url = URI("https://v3.football.api-sports.io/leagues?type=league")
     x = call(url)
@@ -151,11 +223,11 @@ def create_leagues_ids        #populates with leagues, their ids and basic data
         name = league["league"]["name"]
         country = league["country"]["name"]
         stats_since = league["seasons"][0]["year"]
-        League.find_or_create_by(league_id: league_id, name: name, country: country, stats_since: stats_since)
+        League.find_or_create_by(league_id: league_id, name: name, country: country)
     end
 end
 
-def create_all(league_array, seasons)    #works! 
+def seed_all(league_array, seasons)
     seasons.each do |year|
         season = year
         league_array.each do |table|
@@ -165,16 +237,7 @@ def create_all(league_array, seasons)    #works!
     end
 end
 
-def create_players_from_team(club, url)     #helper method for populate_league, below
-    call(url)["response"].map do |player|
-        name = player["player"]["name"]
-        nationality = player["player"]["nationality"]
-        player_id = player["player"]["id"]
-        player = Player.find_or_create_by(player_id: player_id, name: name, nationality: nationality)
-    end
-end
-
-def seed_league_teams_and_players(league, season)     #populates with a league, its teams with basic data, and their players' ids and basic data by season
+def create_league_teams(league, season) ## could import more data
     x = call_custom_league(league, season)
     x["response"].map do |team|
         club_id = team["team"]["id"]
@@ -183,9 +246,32 @@ def seed_league_teams_and_players(league, season)     #populates with a league, 
         founded = team["team"]["founded"]
         stadium = team["venue"]["name"]
         city = team["venue"]["city"]
-        new_club = Club.find_or_create_by(club_id: club_id, name: name, country: country, founded: founded, stadium: stadium, city: city)
-        url = URI("https://v3.football.api-sports.io/players?season=#{season}&league=#{league}&team=#{club_id}")
-        create_players_from_team(new_club, url)
+        new_club = Club.find_or_create_by(club_id: club_id, name: name, country: country, founded: founded, stadium: stadium, city: city, league_id: league)
+    end
+end
+
+def create_teams_across_leagues(league_array, season)
+    league_array.each do |league|
+    create_league_teams(league, season)
+    end
+end
+
+def create_players_from_clubs_in_league(league, season)   #THIS ONE
+    x = call_custom_league(league, season)
+    x["response"].map do |team|
+        club_id = team["team"]["id"]
+        y = call_team_players(league, season, club_id)
+        y["response"].each do |player|
+            player_id = player["player"]["id"]
+            create_player(player_id, season)
+        end
+    end
+end
+
+def create_players_across_leagues(league_array, season)
+    league_array.each do |league|
+        league = league
+        create_players_from_clubs_in_league(league, season) 
     end
 end
 
@@ -231,15 +317,10 @@ def create_player_ids_across_season_for_array_of_leagues(league_array, season)
     end
 end
 
-def player_season(player_id, season)         #broken
+def create_player(player_id, season)         #broken
     player_stats = call_player(player_id, season)
     player_id = player_stats["parameters"]["id"]
     season = player_stats["parameters"]["season"]
-    if !Player.find_by(player_id: "{player_id}", seasons: "#{season}")
-        new_player = Player.create(player_id: "#{player_id}", seasons: "#{season}")
-    end
-
-    binding.pry
     name = player_stats["response"][0]["player"]["name"]
     club_id = player_stats["response"][0]["statistics"][0]["team"]["id"]
     age = player_stats["response"][0]["player"]["age"]
@@ -273,7 +354,7 @@ def player_season(player_id, season)         #broken
     penalties_scored =  player_stats["response"][0]["statistics"][0]["penalty"]["scored"]
     penalties_missed =  player_stats["response"][0]["statistics"][0]["penalty"]["missed"]
     penalties_saved =  player_stats["response"][0]["statistics"][0]["penalty"]["saved"]
-    PlayerStats.create(player_id: "#{player_id}", season: "#{season}", name: "#{name}", club_id: "#{club_id}", age: "#{age}", height: "#{height}", weight: "#{weight}", appearances: "#{appearances}", minutes: "#{minutes}", position: "#{position}", rating: "#{rating}", shots: "#{shots}", shots_on_target: "#{shots_on_target}", goals: "#{goals}", goals_conceded: "#{goals_conceded}", goals_saved: "#{goals_saved}", assists: "#{assists}", passes: "#{passes}", pass_accuracy: "#{pass_accuracy}", tackles: "#{tackles}", blocks: "#{blocks}", interceptions: "#{interceptions}", duels: "#{duels}", duels_won: "#{duels_won}", dribbles_attempted: "#{dribbles_attempted}", dribbles_successful: "#{dribbles_successful}", fouls_drawn: "#{fouls_drawn}", fouls_committed: "#{fouls_committed}", yellow_cards: "#{yellow_cards}", red_cards: "#{red_cards}", penalties_won: "#{penalties_won}", penalties_committed: "#{penalties_committed}", penalties_scored: "#{penalties_scored}", penalties_missed: "#{penalties_missed}", penalties_saved: "#{penalties_saved}")
+    Player.create(player_id: "#{player_id}", name: "#{name}", club_id: "#{club_id}", age: "#{age}", height: "#{height}", weight: "#{weight}", appearances: "#{appearances}", minutes: "#{minutes}", position: "#{position}", rating: "#{rating}", shots: "#{shots}", shots_on_target: "#{shots_on_target}", goals: "#{goals}", goals_conceded: "#{goals_conceded}", goals_saved: "#{goals_saved}", assists: "#{assists}", passes: "#{passes}", pass_accuracy: "#{pass_accuracy}", tackles: "#{tackles}", blocks: "#{blocks}", interceptions: "#{interceptions}", duels: "#{duels}", duels_won: "#{duels_won}", dribbles_attempted: "#{dribbles_attempted}", dribbles_successful: "#{dribbles_successful}", fouls_drawn: "#{fouls_drawn}", fouls_committed: "#{fouls_committed}", yellow_cards: "#{yellow_cards}", red_cards: "#{red_cards}", penalties_won: "#{penalties_won}", penalties_committed: "#{penalties_committed}", penalties_scored: "#{penalties_scored}", penalties_missed: "#{penalties_missed}", penalties_saved: "#{penalties_saved}")
     end
 
     def create_seasons

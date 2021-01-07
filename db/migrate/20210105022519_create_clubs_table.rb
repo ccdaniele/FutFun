@@ -8,7 +8,8 @@ class CreateClubsTable < ActiveRecord::Migration[5.2]
       t.integer :founded
       t.string :stadium
       t.string :city
-
+      t.integer :league_id
+      
     end
   end
 end

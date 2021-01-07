@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_01_06_221646) do
+ActiveRecord::Schema.define(version: 2021_01_06_165909) do
 
   create_table "clubs", id: false, force: :cascade do |t|
     t.integer "club_id"
@@ -19,6 +19,7 @@ ActiveRecord::Schema.define(version: 2021_01_06_221646) do
     t.integer "founded"
     t.string "stadium"
     t.string "city"
+    t.integer "league_id"
   end
 
   create_table "leagues", id: false, force: :cascade do |t|
@@ -26,12 +27,10 @@ ActiveRecord::Schema.define(version: 2021_01_06_221646) do
     t.integer "season"
     t.string "name"
     t.string "country"
-    t.integer "stats_since"
   end
 
-  create_table "player_stats", force: :cascade do |t|
+  create_table "players", id: false, force: :cascade do |t|
     t.integer "player_id"
-    t.integer "season"
     t.string "name"
     t.integer "club_id"
     t.integer "age"
@@ -65,48 +64,6 @@ ActiveRecord::Schema.define(version: 2021_01_06_221646) do
     t.integer "penalties_scored"
     t.integer "penalties_missed"
     t.integer "penalties_saved"
-  end
-
-  create_table "players", id: false, force: :cascade do |t|
-    t.integer "player_id"
-    t.string "name"
-<<<<<<< HEAD
-    t.string "nationality"
-    t.integer "seasons"
-  end
-
-  create_table "seasons", primary_key: "season", force: :cascade do |t|
-=======
-    t.integer "age"
-    t.string "nationality"
-    t.integer "height"
-    t.integer "weight"
-    t.integer "club_id"
-    t.integer "appearances"
-    t.integer "minutes"
-    t.string "position"
-    t.float "rating"
-    t.integer "shots"
-    t.integer "shots_on_target"
-    t.integer "goals"
-    t.integer "assists"
-    t.integer "tackles"
-    t.integer "blocks"
-    t.integer "interceptions"
-    t.integer "duels"
-    t.integer "duels_won"
-    t.integer "dribbles_attempted"
-    t.integer "dribbles_successful"
-    t.integer "fouls_drawn"
-    t.integer "fouls_committed"
-    t.integer "yellow_cards"
-    t.integer "red_cards"
-    t.integer "penalties_won"
-    t.integer "penalties_committed"
-    t.integer "penalties_scored"
-    t.integer "penalties_missed"
-    t.integer "penalties_saved"
->>>>>>> 689f18c50fb502df9935494be9f97da213603186
   end
 
   create_table "users", force: :cascade do |t|

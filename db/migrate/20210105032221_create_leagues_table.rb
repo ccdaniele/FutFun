@@ -5,7 +5,6 @@ class CreateLeaguesTable < ActiveRecord::Migration[5.2]
       t.integer :season
       t.string :name
       t.string :country
-      t.integer :stats_since
     end
   end
 end

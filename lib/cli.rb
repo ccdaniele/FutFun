@@ -1,4 +1,4 @@
-class CLI < ActiveRecord::Base
+class CLI 
     def run
       sign_in
       home
@@ -26,7 +26,6 @@ class CLI < ActiveRecord::Base
       clear_terminal
       puts "Hi #{@user.name}, what do you want to do today?"
       divider
-  
       puts "Select from the items below:"
       puts "1) Look for players information"
       puts "2) Look for teams information"
@@ -92,17 +91,20 @@ class CLI < ActiveRecord::Base
             end
 
             def find_a_new_player
+              
               clear_terminal
               puts "Enter the name of the player"
               query = get_user_input
-              player_info = find_a_player_by_name(name: query)
+              player_info = Player.all.find_by(name: "#{query}")
               # puts "#{player_info.name} is a great #{player_info.position} who plays in #{player_info.club_id} and has score #{player_info.goals} playing #{player_info.minutes} minutes this season"
               #  puts "#{player_info.name} had comitted #{player_info.fouls_commited} fouls and has #{player_info.yellow_cards} yellow cards and #{player_info.red_cards}"
                divider
+               
             end
 
+
             
-            #binding.pry
+            
           
               
 
