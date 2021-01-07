@@ -105,7 +105,7 @@ class CLI
 
 
   
-    # def playing_now
+    # def playing_now hdhdhwkdwljqlwjdlwkdjlwq
     #   clear_terminal
     #   puts "Movies Playing Now"
     #   divider
