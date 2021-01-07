@@ -4,46 +4,46 @@ class Club < ActiveRecord::Base
     
     self.primary_key = "club_id"
 
-    def self.club_info(club)
-        club = self.find_by(name: club)
-        
+    def initialize()
+
+    end
+
+    def club_info
         system "clear"
         
-        puts "Name: #{club.name}"
+        puts "Name: #{self.name}"
         puts ""
-        puts "Country: #{club.country}"
+        puts "Country: #{self.country}"
         puts ""
-        puts "City: #{club.city}"
+        puts "City: #{self.city}"
         puts ""
-        puts "Stadium: #{club.stadium}"
+        puts "Stadium: #{self.stadium}"
         puts ""
         
     end
 
-    def self.club_stats(club)
-        club = Club.find_by(name: club)
- 
+    def club_data
+
         system "clear"
 
-        puts "#{club.name} "
+        puts "#{self.name} "
         puts ""
         puts "  2019 Season Form  " 
         puts "------------------- "
         puts ""
-        puts " Games Played:   #{club.played} "
-        puts " Wins:           #{club.wins} "
-        puts " Draws:          #{club.draws} "
-        puts " Losses:         #{club.losses} " 
-        puts " Goals For:      #{club.goals_for} " 
-        puts " Goals Against:  #{club.goals_against} "
-        puts " Clean Sheets:   #{club.clean_sheets} "
-        puts " No Goals:       #{club.failed_to_score} "
+        puts " Games Played:   #{self.played} "
+        puts " Wins:           #{self.wins} "
+        puts " Draws:          #{self.draws} "
+        puts " Losses:         #{self.losses} " 
+        puts " Goals For:      #{self.goals_for} " 
+        puts " Goals Against:  #{self.goals_against} "
+        puts " Clean Sheets:   #{self.clean_sheets} "
+        puts " No Goals:       #{self.failed_to_score} "
         puts ""
     end
 
-    def club_stats(club)
-        puts " #{club.name} "
-        x = club.name.length
+    def club_stats
+        x = self.name.length
         puts "--".insert(0, "-" * x)
         puts " Wins: #{club.wins}"
         puts " Draws: #{club.draws}"
@@ -56,11 +56,13 @@ class Club < ActiveRecord::Base
         puts ""
     end
 
-    def self.club_roster(club)
-        club = Club.find_by(name: club)
-        club.players
+    def roster
+        self.players
     end
 
-    
+    def roster_names
+        self.players.each {|player| puts player.name}
+    end
+ 
 
 end

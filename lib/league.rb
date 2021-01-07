@@ -5,7 +5,6 @@ class League < ActiveRecord::Base
 
     self.primary_key = "league_id"
 
-
     def self.clubs(league)
         League.find(league).clubs.map do |club_a, club_b|
             binding.pry
@@ -66,6 +65,8 @@ class League < ActiveRecord::Base
 
         end
      end
+
+    
 
 end
 

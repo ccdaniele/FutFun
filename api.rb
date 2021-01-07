@@ -200,6 +200,7 @@ def create_players_across_leagues(league_array, season)      #in create_all
 end
 
 def create_player(player_id, season) #basic method retrieves a specific player's data
+    
     player_stats = call_player(player_id, season)
     player_id = player_stats["parameters"]["id"]
     season = player_stats["parameters"]["season"]
@@ -322,4 +323,4 @@ def create_player(player_id, season) #basic method retrieves a specific player's
  
 
 
-    binding.pry
+    
