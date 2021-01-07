@@ -20,6 +20,15 @@ ActiveRecord::Schema.define(version: 2021_01_06_165909) do
     t.string "stadium"
     t.string "city"
     t.integer "league_id"
+    t.string "form"
+    t.integer "played"
+    t.integer "wins"
+    t.integer "draws"
+    t.integer "losses"
+    t.integer "goals_for"
+    t.integer "goals_against"
+    t.integer "clean_sheets"
+    t.integer "failed_to_score"
   end
 
   create_table "leagues", id: false, force: :cascade do |t|

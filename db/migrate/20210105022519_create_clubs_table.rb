@@ -9,6 +9,15 @@ class CreateClubsTable < ActiveRecord::Migration[5.2]
       t.string :stadium
       t.string :city
       t.integer :league_id
+      t.string :form
+      t.integer :played
+      t.integer :wins
+      t.integer :draws
+      t.integer :losses
+      t.integer :goals_for
+      t.integer :goals_against
+      t.integer :clean_sheets
+      t.integer :failed_to_score
       
     end
   end
