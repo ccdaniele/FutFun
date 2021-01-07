@@ -103,12 +103,6 @@ class CLI
             end
 
 
-            
-            
-          
-              
-
-
 
   
     # def playing_now

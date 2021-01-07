@@ -22,59 +22,6 @@ def find_a_club(club_name)
     Club.find_by(name: "#{club_name}")
 end
 
-def call_custom_league(league, season)
-    call(URI("https://v3.football.api-sports.io/teams?league=#{league}&season=#{season}"))
-end
-
-def call_team
-    call(URI("https://v3.football.api-sports.io/players?season=2019&league=39&team=50"))
-end
-
-def call_team_players(league, season, team)
-    call(URI("https://v3.football.api-sports.io/players?season=#{season}&league=#{league}&team=#{team}"))
-end
-
-def call_player(id, season)
-    call(URI("https://v3.football.api-sports.io/players?id=#{id}&season=#{season}"))
-end
-
-def call_club_stats(club, league, season)
-   x  = call(URI("https://v3.football.api-sports.io/teams/statistics?league=#{league}&team=#{club}&season=#{season}"))
-end
-
-def call_league_and_season(league, season)
-    l = league_selection(league)
-    url = URI("https://v3.football.api-sports.io/leagues?season=#{season}&id=#{l}")
-    call(url)
-end
-
-def call_league
-    call(URI("https://v3.football.api-sports.io/teams?league=39&season=2014"))
-end
-
-def call_league_by_id(id, season)
-    call(URI("https://v3.football.api-sports.io/teams?league=#{id}&season=#{season}"))
-end
-
-
-def seed_league_teams_and_players(league, season)     #populates with a league, its teams with basic data, and their players' ids and basic data by season
-    x = call_custom_league(league, season)
-    x["response"].map do |team|
-        club_id = team["team"]["id"]
-        name = team["team"]["name"]
-        country = team["team"]["country"]
-        founded = team["team"]["founded"]
-        stadium = team["venue"]["name"]
-        city = team["venue"]["city"]
-        new_club = Club.find_or_create_by(club_id: club_id, name: name, country: country, founded: founded, stadium: stadium, city: city)
-        url = URI("https://v3.football.api-sports.io/players?season=#{season}&league=#{league}&team=#{club_id}")
-        create_players_from_team(new_club, url)
-    end
-end
-
-
-
-#-------  older methods-----
 
   #           <--------api methods------->
 
@@ -92,6 +39,10 @@ end
 
 def call_league(league, season)     #basic team data, teams in a league for a season
     call(URI("https://v3.football.api-sports.io/teams?league=#{league}&season=#{season}"))
+end
+
+def call_club_stats(club, league, season)
+    x  = call(URI("https://v3.football.api-sports.io/teams/statistics?league=#{league}&team=#{club}&season=#{season}"))
 end
 
 def call_league_by_id(id, season)
@@ -168,7 +119,7 @@ def destroy_all
     League.destroy_all
 end
 
-def create_all(league_array, season)
+def create_all(league_array, season)   #all methods work
     create_leagues_ids
     create_leagues_clubs(league_array, season)
     create_players_across_leagues(league_array, season)
@@ -187,7 +138,6 @@ def create_leagues_ids   #good     #populates with leagues, their ids and basic 
     end
 end
 
-
 def create_league_clubs(league, season) #good 1/7
     x = call_custom_league(league, season)
     x["response"].map do |team|
@@ -202,7 +152,13 @@ def create_league_clubs(league, season) #good 1/7
     end
 end
 
-def create_club_stats_across_league(league, season)   #good 1/7
+def create_leagues_clubs(league_array, season)   #in create_all
+    league_array.each do |league|
+    create_league_clubs(league, season)
+    end
+end
+
+def create_club_stats_across_league(league, season)   #basic method for club stats
     x = call_custom_league(league, season)
     x["response"].map do |team|
         club = team["team"]["id"]
@@ -219,24 +175,18 @@ def create_club_stats_across_league(league, season)   #good 1/7
         new_club.goals_against = y["response"]["goals"]["against"]["total"]["total"]
         new_club.clean_sheets = y["response"]["clean_sheet"]["total"]
         new_club.failed_to_score = y["response"]["failed_to_score"]["total"]
+        new_club.league_id = league
         new_club.save
     end
 end
 
-
-def create_leagues_clubs(league_array, season)   #in create_all
-    league_array.each do |league|
-    create_league_clubs(league, season)
-    end
-end
-
-def create_club_stats_across_leagues(league_array, season)   #untested, theoretically good
+def create_club_stats_across_leagues(league_array, season)   #in create_all
     league_array.each do |league|
     create_club_stats_across_league(league, season)
     end
 end
 
-def create_players_from_clubs_in_league(league, season)   #populates players across one league
+def create_players_from_clubs_in_league(league, season)   #basic method for players for teams in a league
     x = call_custom_league(league, season)
     x["response"].map do |team|
         club_id = team["team"]["id"]
@@ -254,7 +204,7 @@ def create_players_across_leagues(league_array, season)      #in create_all
     end
 end
 
-def create_player(player_id, season) #good 1/7
+def create_player(player_id, season) #basic method retrieves a specific player's data
     player_stats = call_player(player_id, season)
     player_id = player_stats["parameters"]["id"]
     season = player_stats["parameters"]["season"]
@@ -297,16 +247,32 @@ def create_player(player_id, season) #good 1/7
 
     #------------- Methods for later use -----------#
 
-
-def seed_all(league_array, seasons)
-    seasons.each do |year|
-        season = year
-        league_array.each do |table|
-            league = table
-                seed_league_teams_and_players(league, season)
+    def seed_league_teams_and_players(league, season)     #populates with a league, its teams with basic data, and their players' ids and basic data by season
+        x = call_custom_league(league, season)
+        x["response"].map do |team|
+            club_id = team["team"]["id"]
+            name = team["team"]["name"]
+            country = team["team"]["country"]
+            founded = team["team"]["founded"]
+            stadium = team["venue"]["name"]
+            city = team["venue"]["city"]
+            new_club = Club.find_or_create_by(club_id: club_id, name: name, country: country, founded: founded, stadium: stadium, city: city)
+            url = URI("https://v3.football.api-sports.io/players?season=#{season}&league=#{league}&team=#{club_id}")
+            create_players_from_team(new_club, url)
         end
     end
-end
+    
+
+
+    def seed_all(league_array, seasons)
+        seasons.each do |year|
+            season = year
+            league_array.each do |table|
+                league = table
+                    seed_league_teams_and_players(league, season)
+            end
+        end
+    end
 
     def create_clubs_ids_across_leagues(league_array, season)
         league_array.each do |league| league_id = league
@@ -360,4 +326,5 @@ end
     end
  
 
-binding.pry
+
+    binding.pry
