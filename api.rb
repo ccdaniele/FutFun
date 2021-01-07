@@ -24,6 +24,25 @@ def call_league
     call(URI("https://v3.football.api-sports.io/teams?league=39&season=2014"))
 end
 
+def call_league_by_id(id, season)
+    call(URI("https://v3.football.api-sports.io/teams?league=#{id}&season=#{season}"))
+end
+
+def assign_leagues_seasons(league)
+
+end
+    
+def create_league_across_seasons(league)
+    season = 2011
+    while season < 2019 do
+
+        call_league_by_id(league)
+        league.eason = season
+    end
+
+
+end
+
 def call_custom_league(league, season)
     call(URI("https://v3.football.api-sports.io/teams?league=#{league}&season=#{season}"))
 end
@@ -36,12 +55,8 @@ def call_team_players(league, season, team)
     call(URI("https://v3.football.api-sports.io/players?season=#{season}&league=#{league}&team=#{team}"))
 end
 
-def call_player(id)
-    call(URI("https://v3.football.api-sports.io/players?id=#{id}&season=2018"))
-end
-
-def call_clubs_in_a_league(league, season)
-    call(URI("https://v3.football.api-sports.io/teams?league=#{league}&season=#{season}"))
+def call_player(id, season)
+    call(URI("https://v3.football.api-sports.io/players?id=#{id}&season=#{season}"))
 end
 
 def call_team_stats(team, league, season)    #incomplete
@@ -128,54 +143,51 @@ def destroy_all
     League.destroy_all
 end
 
-def create_player(club, url)
-    url = URI("https://v3.football.api-sports.io/players?season=2019&league=39&team=50")
+def create_leagues_ids        #populates with leagues, their ids and basic data
+    url = URI("https://v3.football.api-sports.io/leagues?type=league")
+    x = call(url)
+    x["response"].each do |league|
+        league_id = league["league"]["id"]
+        name = league["league"]["name"]
+        country = league["country"]["name"]
+        stats_since = league["seasons"][0]["year"]
+        League.find_or_create_by(league_id: league_id, name: name, country: country, stats_since: stats_since)
+    end
+end
+
+def create_all(league_array, seasons)
+    seasons.each do |year|
+        season = year
+        league_array.each do |table|
+            league = table
+                seed_league_teams_and_players(league, season)
+        end
+    end
+end
+
+def create_players_from_team(club, url)     #helper method for populate_league, below
     call(url)["response"].map do |player|
         name = player["player"]["name"]
         nationality = player["player"]["nationality"]
         player_id = player["player"]["id"]
-        age = player["player"]["age"]
-        #club_id = club.id
-        player = Player.create(player_id: player_id, name: name, nationality: nationality) #, club_id: club_id}
+        player = Player.find_or_create_by(player_id: player_id, name: name, nationality: nationality)
     end
 end
 
-def populate_league(league, season)
+def seed_league_teams_and_players(league, season)     #populates with a league, its teams with basic data, and their players' ids and basic data by season
     x = call_custom_league(league, season)
     x["response"].map do |team|
-        club_id = team["team"]["id"]   
-        name = team["team"]["name"]
-        country = team["team"]["country"]
-        founded = team["team"]["founded"]
-        n = team["team"]["id"]
-        club = Club.create(club_id: club_id, name: name, country: country, founded: founded)
-        # url = URI("https://v3.football.api-sports.io/players?season=2019&league=39&team=#{n}")
-        # create_player(club, url)
-    end
-end
-
-def find_or_create_season_and_league(season, league)    #incomplete
-    url = URI("https://v3.football.api-sports.io/leagues?season=#{season}&id=#{league}")
-end
-
-def create_club_ids(league, season)
-    x = call_clubs_in_a_league(league, season)
-    x["response"].each do |team|
         club_id = team["team"]["id"]
         name = team["team"]["name"]
         country = team["team"]["country"]
         founded = team["team"]["founded"]
         stadium = team["venue"]["name"]
         city = team["venue"]["city"]
-         if !Club.find(club_id)
-            new_club = Club.create(club_id: club_id, name: name, country: country, founded: founded, stadium: stadium, city: city)
-         else
-            system "clear" 
-            "#{name} is already a registered club!"
-            system "clear" 
-         end
+        new_club = Club.find_or_create_by(club_id: club_id, name: name, country: country, founded: founded, stadium: stadium, city: city)
+        url = URI("https://v3.football.api-sports.io/players?season=#{season}&league=#{league}&team=#{club_id}")
+        create_players_from_team(new_club, url)
     end
-end 
+end
 
 def create_clubs_ids_across_leagues(league_array, season)
     league_array.each do |league| league_id = league
@@ -219,29 +231,15 @@ def create_player_ids_across_season_for_array_of_leagues(league_array, season)
     end
 end
 
-def create_leagues_ids
-    url = URI("https://v3.football.api-sports.io/leagues?type=league")
-    x = call(url)
-    x["response"].each do |league|
-        league_id = league["league"]["id"]
-        name = league["league"]["name"]
-        country = league["country"]["name"]
-        stats_since = league["seasons"][0]["year"]
-        League.find_or_create_by(league_id: league_id, name: name, country: country, stats_since: stats_since)
-    end
-end
-
-def seed_database_with_ids
-    create_leagues_ids
-    create_clubs_ids_across_seasons_and_leagues(league_array, seasons)
-    #create_player_ids
-end
-
-
-def player_season(player_id)
-    player_stats = call_player(player_id)
+def player_season(player_id, season)         #broken
+    player_stats = call_player(player_id, season)
     player_id = player_stats["parameters"]["id"]
     season = player_stats["parameters"]["season"]
+    if !Player.find_by(player_id: "{player_id}", seasons: "#{season}")
+        new_player = Player.create(player_id: "#{player_id}", seasons: "#{season}")
+    end
+
+    binding.pry
     name = player_stats["response"][0]["player"]["name"]
     club_id = player_stats["response"][0]["statistics"][0]["team"]["id"]
     age = player_stats["response"][0]["player"]["age"]
@@ -285,6 +283,6 @@ def player_season(player_id)
         year += 1
         end
     end
-
+ 
 
 binding.pry
