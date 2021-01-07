@@ -10,18 +10,15 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-
->>>>>>> 85e8a778cf94f16f5ac12d810d3598f4aeb6b2a8
+ActiveRecord::Schema.define(version: 2021_01_06_221646) do
 
   create_table "clubs", id: false, force: :cascade do |t|
     t.integer "club_id"
     t.string "name"
-
     t.string "country"
     t.integer "founded"
     t.string "stadium"
     t.string "city"
->>>>>>> 7ebda54470bbb5f73775e0b7c0ece34482ef6c64
   end
 
   create_table "leagues", id: false, force: :cascade do |t|
@@ -37,8 +34,6 @@
     t.string "name"
     t.integer "club_id"
     t.integer "age"
-<<<<<<< HEAD
-=======
     t.integer "height"
     t.integer "weight"
     t.integer "appearances"
@@ -72,39 +67,12 @@
   end
 
   create_table "players", id: false, force: :cascade do |t|
-   t.integer :player_id
-      t.string :name
-      t.integer :age
-      t.string :nationality
-      t.integer :height
-      t.integer :weight
-      t.integer :club_id
-      t.integer :appearances 
-      t.integer :minutes
-      t.string :position
-      t.float :rating
-      t.integer :shots
-      t.integer :shots_on_target
-      t.integer :goals
-      t.integer :assists
-      t.integer :tackles
-      t.integer :blocks
-      t.integer :interceptions
-      t.integer :duels
-      t.integer :duels_won
-      t.integer :dribbles_attempted
-      t.integer :dribbles_successful
-      t.integer :fouls_drawn
-      t.integer :fouls_committed
-      t.integer :yellow_cards
-      t.integer :red_cards
-      t.integer :penalties_won
-      t.integer :penalties_committed
-      t.integer :penalties_scored
-      t.integer :penalties_missed
-      t.integer :penalties_saved
-      t.string :nationality
-    t.integer "penalties_saved"
+    t.integer "player_id"
+    t.string "name"
+    t.string "nationality"
+  end
+
+  create_table "seasons", primary_key: "season", force: :cascade do |t|
   end
 
   create_table "users", force: :cascade do |t|
@@ -112,9 +80,6 @@
     t.string "favorite_clubs"
     t.string "favorite_players"
     t.string "favorite_leagues"
-  end
-
-  create_table "seasons", primary_key: "season", force: :cascade do |t|
   end
 
 end
