@@ -3,5 +3,5 @@ class Club < ActiveRecord::Base
     belongs_to :league
     
     self.primary_key = "club_id"
-    
+
 end

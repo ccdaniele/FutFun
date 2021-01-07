@@ -54,22 +54,26 @@ class CLI
       #  ----- PLAYERS CATEGORY -------  
     
       #Players main. User selects or search for new player
+      
         def players_home
           clear_terminal
-          puts "What do you are looking for?"
+          puts "What player are you looking for?"
           divider
   
           puts "Select from the items below:"
-          puts "1) My favorite players"
-          puts "2) New player"
+          puts "1) Players info"
+          puts "2) Top 10 Goal scores"
+          puts "3) Top 10 Goal keepers"
+          puts "4) Top 10 Defenders"
+          puts "4) Top 10 Dangerous players"
           puts "\n ~~ (Q)uit or (R)estart ~~" 
   
           choice = get_user_input.upcase
           case choice
           when "1"
-            my_players
+            player_info
           when "2"
-            find_a_new_player
+            table_top_10_Goal_scores
           when "Q" || "QUIT"
           when "R" || "RESTART"
             run
@@ -80,57 +84,74 @@ class CLI
 
 
     
-      # return a list of the players that the user storaged in his list
+      
 
-            def my_players
-              clear_terminal
-              #create template 
-              puts "#{User.players.map{|u|u.name}}"
-
-              divider
-            end
-
-            def find_a_new_player
+            def player_info
               
               clear_terminal
               puts "Enter the name of the player"
               query = get_user_input
               player_info = Player.all.find_by(name: "#{query}")
-              # puts "#{player_info.name} is a great #{player_info.position} who plays in #{player_info.club_id} and has score #{player_info.goals} playing #{player_info.minutes} minutes this season"
-              #  puts "#{player_info.name} had comitted #{player_info.fouls_commited} fouls and has #{player_info.yellow_cards} yellow cards and #{player_info.red_cards}"
-               divider
+              #binding.pry
+              clear_terminal
+              divider
+              puts "#{player_info.name} is a great #{player_info.position} who plays in #{player_info.club_id} and has score #{player_info.goals} playing #{player_info.minutes} minutes this season"
+              puts "#{player_info.name} had comitted #{player_info.fouls_committed} fouls and has #{player_info.yellow_cards} yellow cards and #{player_info.red_cards}"
+              divider
+              puts "\n ** Add this player to your list?  PRESS (A) **"
+              puts "\n ** (1)Back **"
+              puts "\n ~~ (Q)uit or (R)estart ~~" 
+              
+              choice = get_user_input.upcase
+              case choice
+                when "B"
+                 home
+                when "A"
+                  query = @user.
+                when "Q" || "QUIT"
+                when "R" || "RESTART"
+                  run
+                else
+                  error
+              end
                
             end
 
+            def table_top_10_Goal_scores
+              puts "#{Player.top_goals}"
+            end
+              
+            #   clear_terminal
+            #   puts "Enter the name of the player"
+            #   query = get_user_input
+            #   player_info = Player.all.find_by(name: "#{query}")
+            #   #binding.pry
+            #   clear_terminal
+            #   divider
+            #   puts "#{player_info.name} is a great #{player_info.position} who plays in #{player_info.club_id} and has score #{player_info.goals} playing #{player_info.minutes} minutes this season"
+            #   puts "#{player_info.name} had comitted #{player_info.fouls_committed} fouls and has #{player_info.yellow_cards} yellow cards and #{player_info.red_cards}"
+            #   divider
+            #   puts "\n ** Add this player to your list?  PRESS (A) **"
+            #   puts "\n ** (1)Back **"
+            #   puts "\n ~~ (Q)uit or (R)estart ~~" 
+              
+            #   choice = get_user_input.upcase
+            #   case choice
+            #     when "B"
+            #      home
+            #     when "A"
+            #       query = @user.
+            #     when "Q" || "QUIT"
+            #     when "R" || "RESTART"
+            #       run
+            #     else
+            #       error
+            #   end
+            # end
 
 
+
   
-    # def playing_now hdhdhwkdwljqlwjdlwkdjlwq
-    #   clear_terminal
-    #   puts "Movies Playing Now"
-    #   divider
-  
-    #   @movies = MovieAPI.playing_now
-    #   puts_from_api(@movies)
-    # end
-  
-    # def search
-    #   clear_terminal
-    #   puts "Search"
-    #   divider
-  
-    #   puts "Enter a movie title to continue"
-    #   query = get_user_input
-  
-    #   @movies = MovieAPI.search(query)
-    #   puts_from_api(@movies)
-    # end
-  
-    # def puts_from_api(movies)
-    #   movies.each_with_index do |movie, i|
-    #     puts "#{i + 1}) #{movie['title']}"
-    #   end
-    # end
     def error
       puts "Oops try again..."
         pause
@@ -155,3 +176,13 @@ class CLI
       pause
     end
   end
+
+  # return a list of the players that the user storaged in his list
+
+            # def my_players
+            #   clear_terminal
+            #   #create template 
+            #   puts "#{User.players.map{|u|u.name}}"
+
+            #   divider
+            # end
