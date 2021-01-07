@@ -7,7 +7,10 @@ class League < ActiveRecord::Base
 
 
     def self.clubs(league)
-        league.clubs
+        League.find(league).clubs.map do |club_a, club_b|
+            binding.pry
+             club_a.name <=> club_b.name
+        end
     end
 
     def self.club_names(league)
@@ -16,7 +19,7 @@ class League < ActiveRecord::Base
         end
     end
 
-    def self.league_clubs_stats(league)
+    def self.league_clubs_stats(league_id)
         League.find(league).clubs.each do |club|
             puts " #{club.name} "
             x = club.name.length
@@ -33,15 +36,17 @@ class League < ActiveRecord::Base
         end
     end
 
-    def self.calculate_standings(league)
+    def self.calculate_standings(league_id)
         clubs = {}
-        League.find(league).clubs.each do |club|
+        League.find(league_id).clubs.each do |club|
             points = 0
             points += club.wins * 3
-            points += club.draws * 2      
+            points += club.draws * 1      
             clubs[club] = points
+            
         end
-        clubs.sort_by {|club, points| points}.reverse 
+        clubs.sort_by {|club, points| points}.reverse
+        
     end
 
     def self.display_standings(league)
@@ -61,8 +66,6 @@ class League < ActiveRecord::Base
 
         end
      end
-
-    binding.pry
 
 end
 

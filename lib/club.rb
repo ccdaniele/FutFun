@@ -41,7 +41,6 @@ class Club < ActiveRecord::Base
         puts ""
     end
 
-
     def club_stats(club)
         puts " #{club.name} "
         x = club.name.length
@@ -57,14 +56,11 @@ class Club < ActiveRecord::Base
         puts ""
     end
 
-
     def self.club_roster(club)
         club = Club.find_by(name: club)
         club.players
     end
 
-
-
-
+    
 
 end
