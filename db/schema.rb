@@ -23,6 +23,7 @@ ActiveRecord::Schema.define(version: 2021_01_06_221646) do
 
   create_table "leagues", id: false, force: :cascade do |t|
     t.integer "league_id"
+    t.integer "season"
     t.string "name"
     t.string "country"
     t.integer "stats_since"
@@ -70,6 +71,7 @@ ActiveRecord::Schema.define(version: 2021_01_06_221646) do
     t.integer "player_id"
     t.string "name"
     t.string "nationality"
+    t.integer "seasons"
   end
 
   create_table "seasons", primary_key: "season", force: :cascade do |t|

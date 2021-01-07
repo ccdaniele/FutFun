@@ -4,6 +4,7 @@ class CreatePlayersTable < ActiveRecord::Migration[5.2]
       t.integer :player_id
       t.string :name
       t.string :nationality
+      t.integer :seasons
     end
   end
 end
