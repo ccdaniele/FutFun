@@ -11,16 +11,16 @@ class CLI
     #Identify / create a new User
     def sign_in
       clear_terminal
-      puts "|||||||||||||||||||||||||||||||||||"
-      puts "     ()      |||  ||||  ||      |||"
-      puts "   /|||  |||||||  ||||  ||||  |||||"
-      puts "    |||      |||  ||||  ||||  |||||"
-      puts "    |||  |||||||  ||||  ||||  |||||"
-      puts "   /  |  |||||||  ||||  ||||  |||||"
-      puts "   |  |  ||||||||      |||||  |||||"
-      puts "  0   |||||||||||||||||||||||||||||"
-      puts "|||||||||by Fujita - Calderon||||||"
-      puts "Hello, welcome to Fut the home of the 10.000 soccer stats!"
+      puts "|||||||||||||||||||||||||||||||||||||||||||||||||||||"
+      puts "     ()      |||  ||||  ||      |||               ||"            
+      puts "   /|||  |||||||  ||||  ||||  ||||||            ||||"
+      puts "    |||      |||  ||||  ||||  ||||||      |     ||||"
+      puts "    |||  |||||||  ||||  ||||  |||||||     |    |||||"
+      puts "   /  |  |||||||  ||||  ||||  ||||||||   |||   |||||"
+      puts "   |  |  ||||||||      |||||  ||||||||| ||||| ||||||"
+      puts "  0   ||||||||||||||||||||||||||||||||||||||||||||||"
+      puts "|||||||||by Fujita - Calderon|||||||||||||||||||||||"
+      puts "Hello, welcome to FUTW the home of the 10.000 soccer stats!"
       divider
       puts "Please enter your USERNAME or type to create a new one"
       username = get_user_input
@@ -43,7 +43,7 @@ class CLI
       when "Look for Clubs information"
         club_identification
       when "Look for league information"
-        league_home    
+        leagues_identification   
       when "2"
         club_identification
       when "3"
@@ -221,7 +221,7 @@ class CLI
     def club_identification
       clear_terminal
       divider
-      puts "Ok #{@club_name}, choose a team!!"
+      puts "Ok #{@user_name}, choose a team!!"
       divider
       puts "Type the name of the team"
       @club_name = get_user_input
@@ -341,6 +341,108 @@ class CLI
                           end
                         end
 
+                        #  ------------------------------------------------ LEAGUES   -------------------------------------------------------- 
+
+ # Identify team 
+ def leagues_identification
+  @prompt = TTY::Prompt.new
+  clear_terminal
+  choice = @prompt.select("Ok #{@user_name}, choose a League!!",
+  ["Premier League","La Liga","Calcio", "Bundesliga", "MLS", "other?"],"-> Back","-> Quit""-> Restart")
+  case choice
+  when "Premier League"
+    @League_name = "Premier League"
+    if league.find_club_by_name(@league_name) == nil
+      clear_terminal
+      puts "Hey! esto no es Baseball papi"
+      pause
+      pause
+      leagues_identification
+    else
+      @league_name = League.find_league_by_name(@league_name)
+    end
+    leagues_home
+  when "La Liga"
+    @League_name = "Primera Division"
+    if league.find_club_by_name(@league_name) == nil
+      clear_terminal
+      puts "Hey! esto no es Baseball papi"
+      pause
+      pause
+      leagues_identification
+    else
+      @league_name = League.find_club_by_name(@league_name)
+    end
+    leagues_home
+  when "Bundesliga"
+    @League_name = "Bundesliga"
+    if league.find_club_by_name(@league_name) == nil
+      clear_terminal
+      puts "Hey! esto no es Baseball papi"
+      pause
+      pause
+      leagues_identification
+    else
+      @league_name = League.find_club_by_name(@league_name)
+    end
+    leagues_home
+  when "MLS"
+    "MLS"
+  when "other"
+    puts "Type the name of the league"
+    @league_name = get_user_input
+    if league.find_club_by_name(@league_name) == nil
+      clear_terminal
+      puts "Hey! esto no es Baseball papi"
+      pause
+      pause
+      leagues_identification
+    else
+      @league_name = League.find_club_by_name(@league_name)
+    end
+    leagues_home
+    when "-> Back"
+    home
+    when "-> Quit" || "QUIT"
+    when "-> Restart" || "RESTART"
+    run
+      else
+    error
+  end
+end
+
+
+
+
+
+
+
+
+
+                        def leagues_home
+                          @prompt = TTY::Prompt.new
+                           clear_terminal
+                           choice = @prompt.select("Here you have all that you need to know about #{@club_name}!!!",
+                           ["About the Club","Club stats","Club roster", "Club red cards"],"-> Back","-> Quit","-> Restart" )
+                           divider
+                             case choice
+                             when "About the Club"
+                               about_clubs
+                             when "Club stats"
+                               clubs_stats
+                             when "Club roster"
+                               clubs_roster
+                             when "Club red cards"
+                               clubs_red_cards
+                             when "-> Back"
+                               home
+                             when "-> Quit" || "QUIT"
+                             when "-> Restart" || "RESTART"
+                               run
+                                 else
+                               error
+                             end
+                           end
                         
 
 
