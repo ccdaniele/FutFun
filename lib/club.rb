@@ -69,8 +69,7 @@ class Club < ActiveRecord::Base
     end
 
     def roster_names
-        self.players.each do |player| 
-            system "clear"
+        self.players.map do |player| 
             puts ""
             puts player.name
             puts ""
@@ -105,7 +104,7 @@ class Club < ActiveRecord::Base
             if !player.rating
                 player.rating = 5
             end
-            player_ratings[player.name] = player.rating
+            player_ratings[player.name] = player.rating.round(2)
         end
         player_ratings
     end
