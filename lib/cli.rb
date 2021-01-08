@@ -270,6 +270,7 @@ class CLI
           end
     end
 
+    #This method display the names 
 
         def about_clubs
           clear_terminal
