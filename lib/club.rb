@@ -96,9 +96,50 @@ class Club < ActiveRecord::Base
         variable
     end
 
+    def club_ratings
+        player_ratings = {}
+        self.players.each do |player|
+            if !player.rating
+                player.rating = 5
+            end
+            player_ratings[player.name] = player.rating
+        end
+        player_ratings
+    end
+
+    def self.highest_rated
+        club_rating = {}
+        Club.all.each do |club|
+            ratings = club.club_ratings
+            average = (sum_rating(ratings) / club.players.count)
+            club_rating[club.name] = average
+        end
+        club_rating.sort_by{|club, rating| rating}.reverse
+
+    end
+
+    def player_goal_percentage #not done!
+        player_hash = {}
+        player_average_hash = {}
+        club_goals = self.goals_for
+        self.players.each do |player|
+            player_hash[player.name] = player.goals 
+        end
+        player_hash.map {|player, goals| player_average_hash[player] = goals/club_goals}
+
+    end
+
+   
+
  
 end
 
+def sum_rating(hash)
+    sum = 0
+    players = 0
+    hash.each {|x, y| sum += y }
+    sum 
+end
 
 #------- For Formatting ------
 

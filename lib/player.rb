@@ -8,7 +8,6 @@ class Player < ActiveRecord::Base
         self.find_by(name: name)
     end
 
-
     def self.top_goals
         players = {}
         Player.all.each do |player|
@@ -17,8 +16,7 @@ class Player < ActiveRecord::Base
             end
             players[player.name] = player.goals
         end
-        players.sort_by {|player, goals| goals}.reverse.first(10)
-        
+        players.sort_by {|player, goals| goals}.reverse.first(10)        
     end
 
     def self.top_goalkeeper
@@ -57,23 +55,21 @@ class Player < ActiveRecord::Base
         players = {}
         Player.all.each do |player|
             if !player.blocks
-                player.blocks= 0
+                player.blocks = 0
             end
              if !player.tackles
-                  player.tackles= 0
+                  player.tackles = 0
              end
             if !player.interceptions
-                  player.interceptions= 0      
-                  
+                  player.interceptions = 0    
             end
             defense_points = (player.blocks + player.interceptions + player.tackles)/3
             players[player.name] = defense_points
-            #binding.pry
         end
         players.sort_by {|player, defense_points| defense_points}.reverse.first(10)
       
     end
-    #binding.pry
+
     
     def self.top_danger
         players = {}
@@ -87,12 +83,11 @@ class Player < ActiveRecord::Base
             if !player.fouls_committed
                   player.fouls_committed= 0        
             end
-            danger_points = (player.yellow_cards + player.red_cards + player.fouls_committed)/3
+            danger_points = (player.yellow_cards*2 + player.red_cards*4 + player.fouls_committed)/3
             players[player.name] = danger_points
             #binding.pry
         end
         players.sort_by {|player, danger_points| danger_points}.reverse.first(10)
-      
     end
 
     def player_info
@@ -158,18 +153,23 @@ class Player < ActiveRecord::Base
         puts "Red Cards: #{self.red_cards}"
     end
 
+    def goals_by_minutes
+        self.minutes / self.goals
+    end
 
-
-
-
-
-
-
-
-
+    def self.highest_ratings
+        rating_hash = {}
+        Player.all.each do |player|
+            if !player.rating 
+                player.rating = 0
+            end
+            rating_hash[player.name] = player.rating
+        end
+        rating_hash.sort_by{|player, rating| rating}.reverse.first(10)
+    end
 
 end
-#binding.pry
+
 
 
 
