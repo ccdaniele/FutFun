@@ -69,8 +69,7 @@ class Club < ActiveRecord::Base
     end
 
     def roster_names
-        self.players.each do |player| 
-            system "clear"
+        self.players.map do |player| 
             puts ""
             puts player.name
             puts ""
