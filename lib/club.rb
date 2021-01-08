@@ -105,7 +105,7 @@ class Club < ActiveRecord::Base
             if !player.rating
                 player.rating = 5
             end
-            player_ratings[player.name] = player.rating
+            player_ratings[player.name] = player.rating.round(2)
         end
         player_ratings
     end
