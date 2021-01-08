@@ -39,7 +39,7 @@ class CLI
       when "1"
         players_home
       when "2"
-        team_home
+        club_identification
       when "3"
         league_home
       when "Q" || "QUIT"
@@ -54,7 +54,7 @@ class CLI
 
   #  ------------------------------------------------ PLAYERS CATEGORY -------------------------------------------------------- 
     
-      #Players main. User selects or search for new player
+      #Players main. displays the options for players
       
         def players_home
           clear_terminal
@@ -164,7 +164,77 @@ class CLI
  #  ------------------------------------------------ CLUBS ------------------------------------------------------------------------- 
 
 
+      # Identify team 
+    def club_identification
+      clear_terminal
+      divider
+      puts "Ok Footfan, choose a team!!"
+      divider
+      puts "Type the name of the team"
+      @club_name = get_user_input
+      #binding.pry
+      @club = Club.find_club_by_name(@club_name)
+      clubs_home
+      
+    end
 
+
+
+ #Clubs main. displays the options for clubs
+
+def clubs_home
+  clear_terminal
+  divider
+  puts "Here you have all that you need to know about #{@club_name}!!!"
+  divider
+  puts "Select from the items below:"
+  puts "1) About Clubs"
+  puts "2) Clubs stats"
+  puts "3) Clubs roster"
+  puts "4) "
+  puts "5) "
+  puts "\n ~~ (Q)uit or (R)estart ~~" 
+
+  choice = get_user_input.upcase
+          case choice
+          when "1"
+            about_clubs
+          when "2"
+            table_top_10_Goal_scores
+          when "3"
+            table_top_10_GoalKeepers
+          when "4"
+            table_top_10_Defenders
+          when "5"
+            table_top_danger
+
+          when "Q" || "QUIT"
+          when "R" || "RESTART"
+            run
+              else
+            error
+          end
+        end
+
+        def about_clubs
+          i=1
+          clear_terminal
+          divider
+          Player.top_goals.each do |player_instance|
+          puts "\n #{i}. #{player_instance}"
+          i += 1
+          end
+          divider
+          default_options
+        end
+
+        def about_clubs
+          clear_terminal
+          divider
+          @club.club_info
+          divider
+          default_options
+        end
 
 
 
