@@ -420,19 +420,19 @@ class CLI
               @prompt = TTY::Prompt.new
                clear_terminal
                choice = @prompt.select("Here you have all that you need to know about #{@league_name}!!!",
-               ["Clubs of the league stats","Clubs of the league","Most clean sheets", "Display Standings", "League with most red cards"],"-> Back","-> Quit","-> Restart" )
+               ["Clubs of the league stats","Clubs of the league","League with most goals", "Display Standings", "League with most red cards"],"-> Back","-> Quit","-> Restart" )
                divider
                  case choice
                  when "Clubs of the league stats"
                   clubs_of_the_league_stats
                  when "Clubs of the league"
                   clubs_of_the_league
-                 when "Most clean sheets"
-                  most_clean_sheets
+                 when "League with most goals"
+                  most_goals
                  when "Display Standings"
-                   display_standings
+                   displays_standings
                   when "League with most red cards"
-                    league_with_more_red_cards
+                    league_with_most_red_cards
                  when "-> Back"
                    home
                  when "-> Quit" || "QUIT"
@@ -481,10 +481,10 @@ class CLI
                           end
                         end
 
-                        def most_clean_sheets
+                        def most_goals
                           clear_terminal
                           divider
-                          League.most_clean_sheets
+                          League.display_most_goals
                           divider
                           choice = @prompt.select("",
                                 ["-> Back","-> Quit","-> Restart"])
@@ -499,10 +499,10 @@ class CLI
                               end
                             end
 
-                            def display_standings
+                            def displays_standings
                               clear_terminal
                               divider
-                              @League.display_standings
+                              @league.display_standings
                               divider
                               choice = @prompt.select("",
                                     ["-> Back","-> Quit","-> Restart"])

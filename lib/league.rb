@@ -51,9 +51,13 @@ class League < ActiveRecord::Base
 
     def display_standings
         system "clear"
+        n = 1
+        header_footer
         calculate_standings.each do |club, points|
-            puts club.name
+            puts "#{n}. #{club.name}"
+            n += 1
         end
+        header_footer
     end
 
     def top_clubs   # broken for some reason
@@ -144,6 +148,14 @@ class League < ActiveRecord::Base
             n += 1
         end
         club_player
+    end
+
+    def display_most_minutes
+        club_player.each do |player, minutes|
+            binding.pry
+            puts "#{player}:"
+            puts "#{minutes} minutes played"
+        end
     end
 
     def display_most_minutes

@@ -95,7 +95,14 @@ class Club < ActiveRecord::Base
             end
             player_minutes[player.name] = player.minutes
         end
-        player_minutes.sort_by {|player, minutes| minutes}.reverse.flatten
+        player_minutes
+    end
+
+    def display_club_minutes
+        club_minutes.each do |player, minutes|
+            puts "#{player}: #{minutes} minutes played"
+            puts ""
+        end
     end
 
     def club_ratings
