@@ -11,13 +11,16 @@ class CLI
     #Identify / create a new User
     def sign_in
       clear_terminal
-      puts "|||||||  |||||||"
-      puts "|||      |||"
-      puts "||||||   ||||||"
-      puts "|||      |||"
-      puts "|||      ||| by Fujita - Calderon"
-      divider
-      puts "Hello, welcome to FootFan the home of the 10.000 Football stats!"
+      puts "|||||||||||||||||||||||||||||||||||"
+      puts "     ()      |||  ||||  ||      |||"
+      puts "   /|||  |||||||  ||||  ||||  |||||"
+      puts "    |||      |||  ||||  ||||  |||||"
+      puts "    |||  |||||||  ||||  ||||  |||||"
+      puts "   /  |  |||||||  ||||  ||||  |||||"
+      puts "   |  |  ||||||||      |||||  |||||"
+      puts "  0   |||||||||||||||||||||||||||||"
+      puts "|||||||||by Fujita - Calderon||||||"
+      puts "Hello, welcome to Fut the home of the 10.000 soccer stats!"
       divider
       puts "Please enter your USERNAME or type to create a new one"
       username = get_user_input
@@ -244,19 +247,17 @@ class CLI
        @prompt = TTY::Prompt.new
         clear_terminal
         choice = @prompt.select("Here you have all that you need to know about #{@club_name}!!!",
-        ["About Clubs","Clubs stats","Clubs roster"],"-> Back","-> Quit","-> Restart" )
+        ["About the Club","Club stats","Club roster", "Club red cards"],"-> Back","-> Quit","-> Restart" )
         divider
           case choice
-          when "About Clubs"
+          when "About the Club"
             about_clubs
-          when "Clubs stats"
-            table_top_10_Goal_scores
-          when "Clubs roster"
-            table_top_10_GoalKeepers
-          when "4"
-            table_top_10_Defenders
-          when "5"
-            table_top_danger
+          when "Club stats"
+            clubs_stats
+          when "Club roster"
+            clubs_roster
+          when "Club red cards"
+            clubs_red_cards
           when "-> Back"
             home
           when "-> Quit" || "QUIT"
@@ -286,6 +287,61 @@ class CLI
               end
             end
       
+            def clubs_stats
+              clear_terminal
+              divider
+              @club.club_stats
+              divider
+              choice = @prompt.select("",
+                    ["-> Back","-> Quit","-> Restart"])
+                  case choice
+                  when "-> Back"
+                    clubs_home
+                  when "-> Quit" || "QUIT"
+                  when "-> Restart" || "RESTART"
+                    run
+                      else
+                    error
+                  end
+                end
+
+                def clubs_roster
+                  clear_terminal
+                  divider
+                  @club.roster_names
+                  divider
+                  choice = @prompt.select("",
+                        ["-> Back","-> Quit","-> Restart"])
+                      case choice
+                      when "-> Back"
+                        clubs_home
+                      when "-> Quit" || "QUIT"
+                      when "-> Restart" || "RESTART"
+                        run
+                          else
+                        error
+                      end
+                    end
+
+                    def clubs_red_cards
+                      clear_terminal
+                      divider
+                      @club.club_red_cards
+                      divider
+                      choice = @prompt.select("",
+                            ["-> Back","-> Quit","-> Restart"])
+                          case choice
+                          when "-> Back"
+                            clubs_home
+                          when "-> Quit" || "QUIT"
+                          when "-> Restart" || "RESTART"
+                            run
+                              else
+                            error
+                          end
+                        end
+
+                        
 
 
 
