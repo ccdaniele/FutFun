@@ -147,6 +147,14 @@ class League < ActiveRecord::Base
     end
 
     def display_most_minutes
+        club_player.each do |player, minutes|
+            binding.pry
+            puts "#{player}:"
+            puts "#{minutes} minutes played"
+        end
+    end
+
+    def display_most_minutes
         self.most_minutes_in_league.map do |team, players_minutes|
         end
     end

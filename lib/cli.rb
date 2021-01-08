@@ -69,14 +69,6 @@
                         end
                       end
 
-
-
-
-
-
-
-
-
                         def leagues_home
                           @prompt = TTY::Prompt.new
                            clear_terminal
