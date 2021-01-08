@@ -17,7 +17,9 @@ class League < ActiveRecord::Base
         x = self.clubs.map do |club| 
             club.name
         end
-        x
+        header_footer
+        puts x
+        header_footer
     end
 
     def league_clubs_stats      #FIX
