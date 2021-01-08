@@ -62,11 +62,11 @@ class CLI
           divider
   
           puts "Select from the items below:"
-          puts "1) Players info"
+          puts "1) Players resume"
           puts "2) Top 10 Goal scores"
           puts "3) Top 10 Goal keepers"
           puts "4) Top 10 Defenders"
-          puts "4) Top 10 Dangerous players"
+          puts "5) Top 10 Dangerous players"
           puts "\n ~~ (Q)uit or (R)estart ~~" 
   
           choice = get_user_input.upcase
@@ -75,6 +75,13 @@ class CLI
             player_info
           when "2"
             table_top_10_Goal_scores
+          when "3"
+            table_top_10_GoalKeepers
+          when "4"
+            table_top_10_Defenders
+          when "5"
+            table_top_danger
+
           when "Q" || "QUIT"
           when "R" || "RESTART"
             run
@@ -99,27 +106,57 @@ class CLI
               puts "#{player_info.name} is a great #{player_info.position} who plays in #{player_info.club_id} and has score #{player_info.goals} playing #{player_info.minutes} minutes this season"
               puts "#{player_info.name} had comitted #{player_info.fouls_committed} fouls and has #{player_info.yellow_cards} yellow cards and #{player_info.red_cards}"
               divider
-              puts "\n ** Add this player to your list?  PRESS (A) **"
-              puts "\n ** (1)Back **"
-              puts "\n ~~ (Q)uit or (R)estart ~~" 
-              
-              choice = get_user_input.upcase
-              case choice
-                when "B"
-                 home
-                when "A"
-                  query = @user.
-                when "Q" || "QUIT"
-                when "R" || "RESTART"
-                  run
-                else
-                  error
-              end
+              default_options
                
             end
 
             def table_top_10_Goal_scores
-              puts "#{Player.top_goals}"
+              i=1
+              clear_terminal
+              divider
+              Player.top_goals.each do |player_instance|
+              puts "\n #{i}. #{player_instance}"
+              i += 1
+              end
+              divider
+              default_options
+            end
+
+
+            def table_top_10_GoalKeepers
+              i=1
+              clear_terminal
+              divider
+              Player.top_goalkeeper.each do |player_instance|
+              puts "\n #{i}. #{player_instance}"
+              i += 1
+              end
+              divider
+              default_options
+            end
+
+            def table_top_10_Defenders
+              i=1
+              clear_terminal
+              divider
+              Player.top_defense.each do |player_instance|
+              puts "\n #{i}. #{player_instance}"
+              i += 1
+              end
+              divider
+              default_options
+            end
+
+            def table_top_danger
+              i=1
+              clear_terminal
+              divider
+              Player.danger_points.each do |player_instance|
+              puts "\n #{i}. #{player_instance}"
+              i += 1
+              end
+              divider
+              default_options
             end
               
             #   clear_terminal
@@ -177,6 +214,23 @@ class CLI
       pause
     end
   end
+
+  def default_options
+
+    puts "\n ** (B)ack **"
+    puts "\n ~~ (Q)uit or (R)estart ~~" 
+              
+    choice = get_user_input.upcase
+     case choice
+     when "B"
+     home
+     when "Q" || "QUIT"
+     when "R" || "RESTART"
+      run
+     else
+     error
+      end
+    end
 
   # return a list of the players that the user storaged in his list
 
