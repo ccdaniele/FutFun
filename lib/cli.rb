@@ -31,66 +31,55 @@ class CLI
       @prompt = TTY::Prompt.new
       clear_terminal
       divider
-      @prompt.select("Hi,#{@user.name} what do you want to do today?",
-        ["Look for players information","Look for Clubs information","Look for league information"])
+      choice = @prompt.select("Hi,#{@user.name} what do you want to do today?",
+        ["Look for players information","Look for Clubs information","Look for league information"],"-> Quit","-> Restart" )
       divider
-      if "Look for players information"
+      case choice
+      when "Look for players information"
         players_home
-      end
-      if "Look for Clubs information"
+      when "Look for Clubs information"
         club_identification
-      end
-      if "Look for league information"
+      when "Look for league information"
+        league_home    
+      when "2"
+        club_identification
+      when "3"
         league_home
+      when "-> Quit" || "QUIT"
+      when "-> Restart" || "RESTART"
+        run
+      else
+        puts "Oops you miss the goal, try again..."
+        pause
+        home
       end
-
     end
-    #   when "2"
-    #     club_identification
-    #   when "3"
-    #     league_home
-    #   when "Q" || "QUIT"
-    #   when "R" || "RESTART"
-    #     run
-    #   else
-    #     puts "Oops try again..."
-    #     pause
-    #     home
-    #   end
-    # end
 
   #  ------------------------------------------------ PLAYERS CATEGORY -------------------------------------------------------- 
     
       #Players main. displays the options for players
       
         def players_home
+          @prompt = TTY::Prompt.new
           clear_terminal
-          puts "What player are you looking for?"
+          choice = @prompt.select("Tell me,#{@user.name} what player are you looking for today?",
+            ["Players resume","Top 10 goalies of the league","Top 10 golkeepers", "Top 10 defenders", "Top 10 dangerous players"],"-> Back","-> Quit","-> Restart" )
           divider
-  
-          puts "Select from the items below:"
-          puts "1) Players resume"
-          puts "2) Top 10 Goal scores"
-          puts "3) Top 10 Goal keepers"
-          puts "4) Top 10 Defenders"
-          puts "5) Top 10 Dangerous players"
-          puts "\n ~~ (Q)uit or (R)estart ~~" 
-  
-          choice = get_user_input.upcase
           case choice
-          when "1"
+          when "Players resume"
             player_info
-          when "2"
+          when "Top 10 goalies of the league"
             table_top_10_Goal_scores
-          when "3"
+          when "Top 10 golkeepers" 
             table_top_10_GoalKeepers
-          when "4"
+          when "Top 10 defenders"
             table_top_10_Defenders
-          when "5"
+          when "Top 10 dangerous players"
             table_top_danger
-
-          when "Q" || "QUIT"
-          when "R" || "RESTART"
+          when "-> Back"
+            home
+          when "-> Quit" || "QUIT"
+          when "-> Restart" || "RESTART"
             run
               else
             error
@@ -102,18 +91,35 @@ class CLI
             def player_info
               
               clear_terminal
+              @prompt = TTY::Prompt.new
               puts "Enter the name of the player"
               query = get_user_input
-              player_info = Player.all.find_by(name: "#{query}")
+              if Player.all.find_by(name: "#{query}") == nil
+                clear_terminal
+                puts "Try with hockey, that guy doesn't play soccer"
+                pause
+                pause
+                player_info  
+              else player_info = Player.all.find_by(name: "#{query}") 
+              end
               #binding.pry
               clear_terminal
               divider
-              puts "#{player_info.name} is a great #{player_info.position} who plays in #{player_info.club_id} and has score #{player_info.goals} playing #{player_info.minutes} minutes this season"
-              puts "#{player_info.name} had comitted #{player_info.fouls_committed} fouls and has #{player_info.yellow_cards} yellow cards and #{player_info.red_cards}"
-              divider
-              default_options
-               
+              choice = @prompt.select("#{player_info.name} is a great #{player_info.position} who plays in #{player_info.club_id} and has score #{player_info.goals} playing #{player_info.minutes} minutes this season. He had comitted #{player_info.fouls_committed} fouls and has #{player_info.yellow_cards} yellow cards and #{player_info.red_cards}",
+                ["-> Back","-> Quit","-> Restart"])
+              case choice
+              when "-> Back"
+                players_home
+              when "-> Quit" || "QUIT"
+              when "-> Restart" || "RESTART"
+                run
+                  else
+                error
+              end
             end
+              
+               
+          
             # Top ten ten golies calls the method top_goals from players
             def table_top_10_Goal_scores
               i=1
@@ -123,8 +129,17 @@ class CLI
               puts "\n #{i}. #{player_instance}"
               i += 1
               end
-              divider
-              default_options
+              choice = @prompt.select("",
+                ["-> Back","-> Quit","-> Restart"])
+              case choice
+              when "-> Back"
+                players_home
+              when "-> Quit" || "QUIT"
+              when "-> Restart" || "RESTART"
+                run
+                  else
+                error
+              end
             end
 
             # Top ten ten Goalkeepers the method top_goalkeeper from players
@@ -137,8 +152,17 @@ class CLI
               puts "\n #{i}. #{player_instance}"
               i += 1
               end
-              divider
-              default_options
+              choice = @prompt.select("",
+                ["-> Back","-> Quit","-> Restart"])
+              case choice
+              when "-> Back"
+                players_home
+              when "-> Quit" || "QUIT"
+              when "-> Restart" || "RESTART"
+                run
+                  else
+                error
+              end
             end
             
             # Calls the method top_defenders from players
@@ -151,8 +175,17 @@ class CLI
               puts "\n #{i}. #{player_instance}"
               i += 1
               end
-              divider
-              default_options
+              choice = @prompt.select("",
+                ["-> Back","-> Quit","-> Restart"])
+              case choice
+              when "-> Back"
+                players_home
+              when "-> Quit" || "QUIT"
+              when "-> Restart" || "RESTART"
+                run
+                  else
+                error
+              end
             end
             # Calls the method top_danger from players
 
@@ -160,12 +193,22 @@ class CLI
               i=1
               clear_terminal
               divider
-              Player.danger_points.each do |player_instance|
+              
+              Player.top_danger.each do |player_instance|
               puts "\n #{i}. #{player_instance}"
               i += 1
               end
-              divider
-              default_options
+              choice = @prompt.select("",
+                ["-> Back","-> Quit","-> Restart"])
+              case choice
+              when "-> Back"
+                players_home
+              when "-> Quit" || "QUIT"
+              when "-> Restart" || "RESTART"
+                run
+                  else
+                error
+              end
             end
               
  #  ------------------------------------------------ CLUBS ------------------------------------------------------------------------- 
@@ -175,12 +218,20 @@ class CLI
     def club_identification
       clear_terminal
       divider
-      puts "Ok Footfan, choose a team!!"
+      puts "Ok #{@club_name}, choose a team!!"
       divider
       puts "Type the name of the team"
       @club_name = get_user_input
       #binding.pry
+      if Club.find_club_by_name(@club_name) == nil
+        clear_terminal
+        puts "Hey mate! that's a Rugby team"
+        pause
+        pause
+        club_identification
+      else
       @club = Club.find_club_by_name(@club_name)
+      end
       clubs_home
       
     end
@@ -189,59 +240,52 @@ class CLI
 
  #Clubs main. displays the options for clubs
 
-def clubs_home
-  clear_terminal
-  divider
-  puts "Here you have all that you need to know about #{@club_name}!!!"
-  divider
-  puts "Select from the items below:"
-  puts "1) About Clubs"
-  puts "2) Clubs stats"
-  puts "3) Clubs roster"
-  puts "4) "
-  puts "5) "
-  puts "\n ~~ (Q)uit or (R)estart ~~" 
-
-  choice = get_user_input.upcase
+    def clubs_home
+       @prompt = TTY::Prompt.new
+        clear_terminal
+        choice = @prompt.select("Here you have all that you need to know about #{@club_name}!!!",
+        ["About Clubs","Clubs stats","Clubs roster"],"-> Back","-> Quit","-> Restart" )
+        divider
           case choice
-          when "1"
+          when "About Clubs"
             about_clubs
-          when "2"
+          when "Clubs stats"
             table_top_10_Goal_scores
-          when "3"
+          when "Clubs roster"
             table_top_10_GoalKeepers
           when "4"
             table_top_10_Defenders
           when "5"
             table_top_danger
-
-          when "Q" || "QUIT"
-          when "R" || "RESTART"
+          when "-> Back"
+            home
+          when "-> Quit" || "QUIT"
+          when "-> Restart" || "RESTART"
             run
               else
             error
           end
         end
 
-        def about_clubs
-          i=1
-          clear_terminal
-          divider
-          Player.top_goals.each do |player_instance|
-          puts "\n #{i}. #{player_instance}"
-          i += 1
-          end
-          divider
-          default_options
-        end
 
         def about_clubs
           clear_terminal
           divider
           @club.club_info
           divider
-          default_options
-        end
+          choice = @prompt.select("",
+                ["-> Back","-> Quit","-> Restart"])
+              case choice
+              when "-> Back"
+                clubs_home
+              when "-> Quit" || "QUIT"
+              when "-> Restart" || "RESTART"
+                run
+                  else
+                error
+              end
+            end
+      
 
 
 
@@ -281,22 +325,24 @@ def clubs_home
     end
   end
 
-  def default_options
-
-    puts "\n ** (B)ack **"
-    puts "\n ~~ (Q)uit or (R)estart ~~" 
+  # def default_options
+  #   choice = @prompt.select()
+  #     ["-> Back","-> Quit","-> Restart"] )
+  #   puts "\n ** (B)ack **"
+  #   puts "\n ~~ (Q)uit or (R)estart ~~" 
               
-    choice = get_user_input.upcase
-     case choice
-     when "B"
-     home
-     when "Q" || "QUIT"
-     when "R" || "RESTART"
-      run
-     else
-     error
-      end
-    end
+  #   choice = get_user_input.upcase
+  #    case choice
+  #    when "B"
+  #    home
+  #    when "-> Back"
+  #    when "Q" || "QUIT"
+  #    when "R" || "RESTART"
+  #     runc
+  #    else
+  #    error
+  #     end
+  #   end
 
 
     #  ------------------------------------------------ ABORT METHODS -------------------------------------------------------- 
