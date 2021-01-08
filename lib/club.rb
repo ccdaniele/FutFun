@@ -69,7 +69,12 @@ class Club < ActiveRecord::Base
     end
 
     def roster_names
-        self.players.each {|player| puts player.name}
+        self.players.each do |player| 
+            system "clear"
+            puts ""
+            puts player.name
+            puts ""
+        end
     end
     
     def club_red_cards   #helper method for #most_red_cards in League
@@ -89,7 +94,7 @@ class Club < ActiveRecord::Base
             if !player.minutes
                 player.minutes = 0
             end
-             += player.data     
+              
         end
         variable
     end
@@ -118,12 +123,16 @@ class Club < ActiveRecord::Base
 
     def player_goal_percentage #not done!
         player_hash = {}
-        player_average_hash = {}
-        club_goals = self.goals_for
+        player_percentage_hash = {}
+        club_goals = self.goals_for.to_f
         self.players.each do |player|
             player_hash[player.name] = player.goals 
         end
-        player_hash.map {|player, goals| player_average_hash[player] = goals/club_goals}
+        player_hash.map do |player, goals| 
+        
+            x = player_percentage_hash[player] = (goals/club_goals) * 100
+        end
+        player_percentage_hash
     end
 end
 

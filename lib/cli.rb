@@ -3,11 +3,6 @@ class CLI
   @prompt = TTY::Prompt.new
   
   def run
-<<<<<<< HEAD
-    sign_in
-    home
-  end
-=======
       sign_in
       home
     end
@@ -32,7 +27,6 @@ class CLI
       @user = User.find_or_create_by(name: username)
     end
 
->>>>>>> 91889417672ab8c717b8560f998b1dae7ec28954
 
   #Identify / create a new User
   def sign_in
@@ -286,26 +280,6 @@ class CLI
       end
   end
 
-<<<<<<< HEAD
-  def about_clubs
-    clear_terminal
-    divider
-    @club.club_info
-    divider
-    choice = @prompt.select("",
-          ["-> Back","-> Quit","-> Restart"])
-        case choice
-        when "-> Back"
-          clubs_home
-        when "-> Quit" || "QUIT"
-        when "-> Restart" || "RESTART"
-          run
-            else
-          error
-        end
-      end
-  
-=======
 
  #Clubs main. displays the options for clubs
 
@@ -419,7 +393,6 @@ class CLI
 
 
 
->>>>>>> 91889417672ab8c717b8560f998b1dae7ec28954
 #  ------------------------------------------------ CLI ACCESSORIES METHODS -------------------------------------------------------- 
   
     def error
