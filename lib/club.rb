@@ -8,6 +8,10 @@ class Club < ActiveRecord::Base
         Club.all.find_by(name: name)
     end
 
+    def self.club_name_from_id(club_id)
+        Club.find_by(club_id: club_id).name
+    end
+
     
     def club_info
         system "clear"
@@ -80,12 +84,13 @@ class Club < ActiveRecord::Base
         cards
     end
 
-    def club_specific_data(data)     #helper method for #most_ in League
-        variable = 0
+    def club_minutes     #helper method for #most_minutes in League
+        minutes = 0
         self.players.each do |player|
             if !player.data
                 player.data = 0
             end
+            binding.pry
             variable += player.data     
         end
         variable
