@@ -51,7 +51,7 @@ class CLI
       when "Look for Clubs information"
         club_identification
       when "Look for league information"
-        leagues_identification   
+        leagues_home   
       when "Trivia"
         intro_trivia
       when "3"
@@ -368,6 +368,28 @@ class CLI
 
 
             # Identify team 
+            def leagues_home
+              @prompt = TTY::Prompt.new
+               clear_terminal
+               choice = @prompt.select( "Choose your leagues options!!!",
+               ["League with most goals", "League with most red cards","Select my league"],"-> Back","-> Quit","-> Restart" )
+               divider
+                 case choice
+                 when "Select my league"
+                  leagues_identification
+                 when "League with most goals"
+                  most_goals
+                  when "League with most red cards"
+                    league_with_most_red_cards
+                 when "-> Back"
+                   home
+                 when "-> Quit" || "QUIT"
+                 when "-> Restart" || "RESTART"
+                   run
+                     else
+                   error
+                 end
+               end
 
              def leagues_identification
               @prompt = TTY::Prompt.new
@@ -375,23 +397,27 @@ class CLI
               choice = @prompt.select("Ok #{@user_name}, choose a League!!",
               ["Premier League","La Liga","Serie A", "Bundesliga", "MLS", "other?"],"-> Back","-> Quit","-> Restart")
               case choice
-              when "Premier League"
-                @league_name = "Premier League"
+              when "Serie A"
+                @league_name = "Serie A"
                   @league = League.find_league(@league_name)
-                leagues_home
+                  leagues_post_home
+                when "Premier League"
+                  @league_name = "Premier League"
+                    @league = League.find_league(@league_name)
+                leagues_post_home
               when "La Liga"
                 @league_name  = "Primera Division"
                   @league = League.find_league(@league_name)
-                leagues_home
+                leagues_post_home
               when "Bundesliga"
                 @league_name  = "Bundesliga 1"
                   @league = League.find_league(@league_name)
-                leagues_home
+                leagues_post_home
               when "MLS"
                 "Major League Soccer"
                 @league_name  = "Major League Soccer"
                   @league = League.find_league(@league_name)
-                  leagues_home
+                  leagues_post_home
               when "other?"
                 puts "Type the name of the league"
                 @league_name = get_user_input
@@ -404,7 +430,7 @@ class CLI
                 else
                   @league = League.find_league(@league_name)
                 end
-                leagues_home
+                leagues_post_home
                 when "-> Back"
                 home
                 when "-> Quit" || "QUIT"
@@ -416,23 +442,19 @@ class CLI
             end
             
               
-            def leagues_home
+            def leagues_post_home
               @prompt = TTY::Prompt.new
                clear_terminal
                choice = @prompt.select("Here you have all that you need to know about #{@league_name}!!!",
-               ["Clubs of the league stats","Clubs of the league","League with most goals", "Display Standings", "League with most red cards"],"-> Back","-> Quit","-> Restart" )
+               ["Clubs of the league stats","Clubs of the league", "Display Standings"],"-> Back","-> Quit","-> Restart" )
                divider
                  case choice
                  when "Clubs of the league stats"
                   clubs_of_the_league_stats
                  when "Clubs of the league"
                   clubs_of_the_league
-                 when "League with most goals"
-                  most_goals
                  when "Display Standings"
                    displays_standings
-                  when "League with most red cards"
-                    league_with_most_red_cards
                  when "-> Back"
                    home
                  when "-> Quit" || "QUIT"

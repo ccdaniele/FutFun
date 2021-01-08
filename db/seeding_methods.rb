@@ -199,3 +199,5 @@ def create_player(player_id, season) #basic method retrieves a specific player's
     new_player.penalties_saved =  player_stats["response"][0]["statistics"][0]["penalty"]["saved"]
     new_player.save
     end
+
+    
