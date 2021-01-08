@@ -14,12 +14,13 @@ class League < ActiveRecord::Base
     end
 
     def club_names
-        self.clubs.map do |club| 
-            puts club.name
+        x = self.clubs.map do |club| 
+            club.name
         end
+        x
     end
 
-    def league_clubs_stats
+    def league_clubs_stats      #FIX
         self.clubs.each do |club|
             puts " #{club.name} "
             x = club.name.length
@@ -145,6 +146,7 @@ class League < ActiveRecord::Base
 
     def display_most_minutes
         self.most_minutes_in_league.map do |team, players_minutes|
+        end
     end
 
 end
