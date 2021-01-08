@@ -14,9 +14,10 @@ class League < ActiveRecord::Base
     end
 
     def club_names
-        self.clubs.map do |club| 
-            puts club.name
-        end
+       x = self.clubs.map do |club| 
+             club.name
+            end
+            x  
     end
 
     def league_clubs_stats
