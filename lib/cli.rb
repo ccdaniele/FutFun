@@ -3,9 +3,36 @@ class CLI
   @prompt = TTY::Prompt.new
   
   def run
+<<<<<<< HEAD
     sign_in
     home
   end
+=======
+      sign_in
+      home
+    end
+
+
+    #Identify / create a new User
+    def sign_in
+      clear_terminal
+      puts "|||||||||||||||||||||||||||||||||||"
+      puts "     ()      |||  ||||  ||      |||"
+      puts "   /|||  |||||||  ||||  ||||  |||||"
+      puts "    |||      |||  ||||  ||||  |||||"
+      puts "    |||  |||||||  ||||  ||||  |||||"
+      puts "   /  |  |||||||  ||||  ||||  |||||"
+      puts "   |  |  ||||||||      |||||  |||||"
+      puts "  0   |||||||||||||||||||||||||||||"
+      puts "|||||||||by Fujita - Calderon||||||"
+      puts "Hello, welcome to Fut the home of the 10.000 soccer stats!"
+      divider
+      puts "Please enter your USERNAME or type to create a new one"
+      username = get_user_input
+      @user = User.find_or_create_by(name: username)
+    end
+
+>>>>>>> 91889417672ab8c717b8560f998b1dae7ec28954
 
   #Identify / create a new User
   def sign_in
@@ -259,6 +286,7 @@ class CLI
       end
   end
 
+<<<<<<< HEAD
   def about_clubs
     clear_terminal
     divider
@@ -277,6 +305,121 @@ class CLI
         end
       end
   
+=======
+
+ #Clubs main. displays the options for clubs
+
+    def clubs_home
+       @prompt = TTY::Prompt.new
+        clear_terminal
+        choice = @prompt.select("Here you have all that you need to know about #{@club_name}!!!",
+        ["About the Club","Club stats","Club roster", "Club red cards"],"-> Back","-> Quit","-> Restart" )
+        divider
+          case choice
+          when "About the Club"
+            about_clubs
+          when "Club stats"
+            clubs_stats
+          when "Club roster"
+            clubs_roster
+          when "Club red cards"
+            clubs_red_cards
+          when "-> Back"
+            home
+          when "-> Quit" || "QUIT"
+          when "-> Restart" || "RESTART"
+            run
+              else
+            error
+          end
+        end
+
+
+        def about_clubs
+          clear_terminal
+          divider
+          @club.club_info
+          divider
+          choice = @prompt.select("",
+                ["-> Back","-> Quit","-> Restart"])
+              case choice
+              when "-> Back"
+                clubs_home
+              when "-> Quit" || "QUIT"
+              when "-> Restart" || "RESTART"
+                run
+                  else
+                error
+              end
+            end
+      
+            def clubs_stats
+              clear_terminal
+              divider
+              @club.club_stats
+              divider
+              choice = @prompt.select("",
+                    ["-> Back","-> Quit","-> Restart"])
+                  case choice
+                  when "-> Back"
+                    clubs_home
+                  when "-> Quit" || "QUIT"
+                  when "-> Restart" || "RESTART"
+                    run
+                      else
+                    error
+                  end
+                end
+
+                def clubs_roster
+                  clear_terminal
+                  divider
+                  @club.roster_names
+                  divider
+                  choice = @prompt.select("",
+                        ["-> Back","-> Quit","-> Restart"])
+                      case choice
+                      when "-> Back"
+                        clubs_home
+                      when "-> Quit" || "QUIT"
+                      when "-> Restart" || "RESTART"
+                        run
+                          else
+                        error
+                      end
+                    end
+
+                    def clubs_red_cards
+                      clear_terminal
+                      divider
+                      @club.club_red_cards
+                      divider
+                      choice = @prompt.select("",
+                            ["-> Back","-> Quit","-> Restart"])
+                          case choice
+                          when "-> Back"
+                            clubs_home
+                          when "-> Quit" || "QUIT"
+                          when "-> Restart" || "RESTART"
+                            run
+                              else
+                            error
+                          end
+                        end
+
+                        
+
+
+
+
+
+
+
+ 
+
+
+
+>>>>>>> 91889417672ab8c717b8560f998b1dae7ec28954
 #  ------------------------------------------------ CLI ACCESSORIES METHODS -------------------------------------------------------- 
   
     def error
