@@ -14,13 +14,13 @@ class League < ActiveRecord::Base
     end
 
     def club_names
-       x = self.clubs.map do |club| 
-             club.name
-            end
-            x  
+        x = self.clubs.map do |club| 
+            club.name
+        end
+        x
     end
 
-    def league_clubs_stats
+    def league_clubs_stats      #FIX
         self.clubs.each do |club|
             puts " #{club.name} "
             x = club.name.length
@@ -128,6 +128,26 @@ class League < ActiveRecord::Base
         header_footer
     end
 
+    def highest_goal_contribution_percentage
+        x = self.clubs.map {|club| club.player_goal_percentage}
+    end
+
+    def most_minutes_in_league   #player with most minutes played for each team in league
+        player_minutes = {}
+        club_player = {}
+        self.clubs.all.each do |club|
+            n = 0
+            x = club.club_minutes
+            club_player[club.name] = {x[0] => x[1]}
+            n += 1
+        end
+        club_player
+    end
+
+    def display_most_minutes
+        self.most_minutes_in_league.map do |team, players_minutes|
+        end
+    end
 
 end
 

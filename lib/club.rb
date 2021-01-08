@@ -94,9 +94,9 @@ class Club < ActiveRecord::Base
             if !player.minutes
                 player.minutes = 0
             end
-              
+            player_minutes[player.name] = player.minutes
         end
-        variable
+        player_minutes.sort_by {|player, minutes| minutes}.reverse.flatten
     end
 
     def club_ratings
@@ -109,8 +109,15 @@ class Club < ActiveRecord::Base
         end
         player_ratings
     end
-
-    def self.highest_rated
+   
+    def sum_rating(hash)
+        sum = 0
+        players = 0
+        hash.each {|x, y| sum += y }
+        sum 
+    end
+   
+    def self.highest_rated  #down -- some clubs have 0 players?
         club_rating = {}
         Club.all.each do |club|
             ratings = club.club_ratings
@@ -118,30 +125,26 @@ class Club < ActiveRecord::Base
             club_rating[club.name] = average
         end
         club_rating.sort_by{|club, rating| rating}.reverse
-
     end
 
-    def player_goal_percentage #not done!
+    def player_goal_percentage #what percentage of club's goals are from each player
         player_hash = {}
+        club_hash = {}
         player_percentage_hash = {}
         club_goals = self.goals_for.to_f
         self.players.each do |player|
+            if !player.goals 
+                player.goals = 0
+            end
             player_hash[player.name] = player.goals 
         end
         player_hash.map do |player, goals| 
-        
-            x = player_percentage_hash[player] = (goals/club_goals) * 100
+            x = player_percentage_hash[player] = ((goals/club_goals) * 100).round(2)
         end
-        player_percentage_hash
+        x = player_percentage_hash.sort_by{|player, percentage| percentage}.reverse.flatten
+        end
     end
-end
 
-def sum_rating(hash)
-    sum = 0
-    players = 0
-    hash.each {|x, y| sum += y }
-    sum 
-end
 
 #------- For Formatting ------
 
