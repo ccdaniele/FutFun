@@ -12,15 +12,25 @@ class CLI
     def sign_in
       clear_terminal
       puts "|||||||||||||||||||||||||||||||||||||||||||||||||||||"
-      puts "     ()      |||  ||||  ||      |||               ||"            
+      sleep 0.3
+      puts "     ()      |||  ||||  ||      |||               ||" 
+      sleep 0.3           
       puts "   /|||  |||||||  ||||  ||||  ||||||            ||||"
+      sleep 0.3
       puts "    |||      |||  ||||  ||||  ||||||      |     ||||"
+      sleep 0.3
       puts "    |||  |||||||  ||||  ||||  |||||||     |    |||||"
+      sleep 0.3
       puts "   /  |  |||||||  ||||  ||||  ||||||||   |||   |||||"
+      sleep 0.3
       puts "   |  |  ||||||||      |||||  ||||||||| ||||| ||||||"
+      sleep 0.3
       puts "  0   ||||||||||||||||||||||||||||||||||||||||||||||"
+      sleep 0.3
       puts "|||||||||by Fujita - Calderon|||||||||||||||||||||||"
+      sleep 0.3
       puts "Hello, welcome to FUTW the home of the 10.000 soccer stats!"
+      sleep 0.3
       divider
       puts "Please enter your USERNAME or type to create a new one"
       username = get_user_input
@@ -35,7 +45,7 @@ class CLI
       clear_terminal
       divider
       choice = @prompt.select("Hi,#{@user.name} what do you want to do today?",
-        ["Look for players information","Look for Clubs information","Look for league information"],"-> Quit","-> Restart" )
+        ["Look for players information","Look for Clubs information","Look for league information", "Trivia"],"-> Quit","-> Restart" )
       divider
       case choice
       when "Look for players information"
@@ -44,8 +54,8 @@ class CLI
         club_identification
       when "Look for league information"
         leagues_identification   
-      when "2"
-        club_identification
+      when "Trivia"
+        intro_trivia
       when "3"
         league_home
       when "-> Quit" || "QUIT"
@@ -343,73 +353,73 @@ class CLI
 
                         #  ------------------------------------------------ LEAGUES   -------------------------------------------------------- 
 
- # Identify team 
- def leagues_identification
-  @prompt = TTY::Prompt.new
-  clear_terminal
-  choice = @prompt.select("Ok #{@user_name}, choose a League!!",
-  ["Premier League","La Liga","Calcio", "Bundesliga", "MLS", "other?"],"-> Back","-> Quit""-> Restart")
-  case choice
-  when "Premier League"
-    @League_name = "Premier League"
-    if league.find_club_by_name(@league_name) == nil
-      clear_terminal
-      puts "Hey! esto no es Baseball papi"
-      pause
-      pause
-      leagues_identification
-    else
-      @league_name = League.find_league_by_name(@league_name)
-    end
-    leagues_home
-  when "La Liga"
-    @League_name = "Primera Division"
-    if league.find_club_by_name(@league_name) == nil
-      clear_terminal
-      puts "Hey! esto no es Baseball papi"
-      pause
-      pause
-      leagues_identification
-    else
-      @league_name = League.find_club_by_name(@league_name)
-    end
-    leagues_home
-  when "Bundesliga"
-    @League_name = "Bundesliga"
-    if league.find_club_by_name(@league_name) == nil
-      clear_terminal
-      puts "Hey! esto no es Baseball papi"
-      pause
-      pause
-      leagues_identification
-    else
-      @league_name = League.find_club_by_name(@league_name)
-    end
-    leagues_home
-  when "MLS"
-    "MLS"
-  when "other"
-    puts "Type the name of the league"
-    @league_name = get_user_input
-    if league.find_club_by_name(@league_name) == nil
-      clear_terminal
-      puts "Hey! esto no es Baseball papi"
-      pause
-      pause
-      leagues_identification
-    else
-      @league_name = League.find_club_by_name(@league_name)
-    end
-    leagues_home
-    when "-> Back"
-    home
-    when "-> Quit" || "QUIT"
-    when "-> Restart" || "RESTART"
-    run
-      else
-    error
-  end
-end
+                      # Identify team 
+                      def leagues_identification
+                        @prompt = TTY::Prompt.new
+                        clear_terminal
+                        choice = @prompt.select("Ok #{@user_name}, choose a League!!",
+                        ["Premier League","La Liga","Calcio", "Bundesliga", "MLS", "other?"],"-> Back","-> Quit","-> Restart")
+                        case choice
+                        when "Premier League"
+                          @league_name = "Premier League"
+                          if League.find_league(@league_name) == nil
+                            clear_terminal
+                            puts "Hey! esto no es Baseball papi"
+                            pause
+                            pause
+                            leagues_identification
+                          else
+                            @league = League.find_league(@league_name)
+                          end
+                          leagues_home
+                        when "La Liga"
+                          @league_name  = "Primera Division"
+                          if League.find_league(@league_name) == nil
+                            clear_terminal
+                            puts "Hey! esto no es Baseball papi"
+                            pause
+                            pause
+                            leagues_identification
+                          else
+                            @league = League.find_league(@league_name)
+                          end
+                          leagues_home
+                        when "Bundesliga"
+                          @league_name  = "Bundesliga"
+                          if League.find_league(@league_name) == nil
+                            clear_terminal
+                            puts "Hey! esto no es Baseball papi"
+                            pause
+                            pause
+                            leagues_identification
+                          else
+                            @league = League.find_league(@league_name)
+                          end
+                          leagues_home
+                        when "MLS"
+                          "MLS"
+                        when "other?"
+                          puts "Type the name of the league"
+                          @league_name = get_user_input
+                          if League.find_league(@league_name) == nil
+                            clear_terminal
+                            puts "Hey! esto no es Baseball papi"
+                            pause
+                            pause
+                            leagues_identification
+                          else
+                            @league = League.find_league(@league_name)
+                          end
+                          leagues_home
+                          when "-> Back"
+                          home
+                          when "-> Quit" || "QUIT"
+                          when "-> Restart" || "RESTART"
+                          run
+                            else
+                          error
+                        end
+                      end
 
 
 
@@ -422,14 +432,15 @@ end
                         def leagues_home
                           @prompt = TTY::Prompt.new
                            clear_terminal
-                           choice = @prompt.select("Here you have all that you need to know about #{@club_name}!!!",
-                           ["About the Club","Club stats","Club roster", "Club red cards"],"-> Back","-> Quit","-> Restart" )
+                           choice = @prompt.select("Here you have all that you need to know about #{@league_name}!!!",
+                           ["Clubs of the league stats","Clubs of the league","Club roster", "Club red cards"],"-> Back","-> Quit","-> Restart" )
                            divider
+                           binding.pry
                              case choice
-                             when "About the Club"
-                               about_clubs
-                             when "Club stats"
-                               clubs_stats
+                             when "Clubs of the league stats"
+                              clubs_of_the_league_stats
+                             when "Clubs of the league"
+                              clubs_of_the_league
                              when "Club roster"
                                clubs_roster
                              when "Club red cards"
@@ -444,15 +455,203 @@ end
                              end
                            end
                         
+                           def clubs_of_the_league_stats
+                            clear_terminal
+                            divider
+                            binding.pry
+                            @league.league_clubs_stats
+                            divider
+                            choice = @prompt.select("",
+                                  ["-> Back","-> Quit","-> Restart"])
+                                case choice
+                                when "-> Back"
+                                  clubs_home
+                                when "-> Quit" || "QUIT"
+                                when "-> Restart" || "RESTART"
+                                  run
+                                    else
+                                  error
+                                end
+                              end
+
+                              def clubs_of_the_league
+                                clear_terminal
+                                divider
+                                binding.pry
+                                @league.league_clubs_stats
+                                divider
+                                choice = @prompt.select("",
+                                      ["-> Back","-> Quit","-> Restart"])
+                                    case choice
+                                    when "-> Back"
+                                      clubs_home
+                                    when "-> Quit" || "QUIT"
+                                    when "-> Restart" || "RESTART"
+                                      run
+                                        else
+                                      error
+                                    end
+                                  end
 
 
+                                  def clubs_of_the_league
+                                    clear_terminal
+                                    divider
+                                    binding.pry
+                                    @league.league_clubs_stats
+                                    divider
+                                    choice = @prompt.select("",
+                                          ["-> Back","-> Quit","-> Restart"])
+                                        case choice
+                                        when "-> Back"
+                                          clubs_home
+                                        when "-> Quit" || "QUIT"
+                                        when "-> Restart" || "RESTART"
+                                          run
+                                            else
+                                          error
+                                        end
+                                      end
 
 
+#  ------------------------------------------------ GAMES -------------------------------------------------------- 
+
+def intro_trivia
+puts "So, do you think that you know a lot about Soccer? Respond the following trivias"
+choice = @prompt.select("",
+  ["Go for it!","-> Back","-> Quit","-> Restart"])
+case choice
+when "Go for it!"
+  trivia_1
+when "-> Back"
+  clubs_home
+when "-> Quit" || "QUIT"
+when "-> Restart" || "RESTART"
+  run
+    else
+  error
+end
+end
 
 
+def trivia_1
+  @points = 0
+  @prompt = TTY::Prompt.new
+   clear_terminal
+   choice = @prompt.select("What's the player with more goals in the history?", 
+    ["Cristiano Ronaldo", "Pele", "Messi", "Josef Bican"], "-> Back","-> Quit","-> Restart" )
+   divider
+     case choice
+     when "Cristiano Ronaldo"
+      wrong_answer
+      "Pele"
+      wrong_answer
+     when "Messi"
+      wrong_answer
+     when "Josef Bican"
+      puts "Oh right! Josef score more than 805 goals!!!" 
+      correct_answer
+      trivia_2
+     when "-> Back"
+       home
+     when "-> Quit" || "QUIT"
+     when "-> Restart" || "RESTART"
+       run
+         else
+       error
+     end
+   end
 
+   def trivia_2
+    @points = 0
+    @prompt = TTY::Prompt.new
+     clear_terminal
+     choices = ["Sheffield Football Club", "Real Madrid", "Evan Fujita's Chicago coding Boys", "Manchester City"]
+     choice = @prompt.select("What's the olderst team in the history?",
+     choices, "-> Back","-> Quit","-> Restart" )
+     divider
+       case choice
+       when "Real Madrid"
+        wrong_answer
+       when "Evan Fujita's Chicago coding Boys"
+        puts "This team is really good, but it is not the oldest, try again"
+        pause
+        wrong_answer
+       when "Manchester City"
+        wrong_answer
+       when "Sheffield Football Club"
+        puts "Sure, it's older than Dolly Parton" 
+        correct_answer
+        trivia_3
+       when "-> Back"
+         home
+       when "-> Quit" || "QUIT"
+       when "-> Restart" || "RESTART"
+         run
+           else
+         error
+       end
+     end
  
+     def trivia_3
+      @points = 0
+      @prompt = TTY::Prompt.new
+       clear_terminal
+       choices = ["Venezuela", "Germany", "Uruguay", "Brazil"]
+       choice = @prompt.select("What's the national club with more world cups in the history?",
+       choices, "-> Back","-> Quit","-> Restart" )
+       divider
+         case choice
+         when "Venezuela"
+          wrong_answer
+         when "Germany"
+          wrong_answer
+         when "Uruguay"
+          wrong_answer
+         when "Brazil"
+          puts "Obrigado! Brazil has 5 world cups goals!!!" 
+          correct_answer
+          puts "Your score is #{@points}"
+          trivia_4
+         when "-> Back"
+           home
+         when "-> Quit" || "QUIT"
+         when "-> Restart" || "RESTART"
+           run
+             else
+           error
+         end
+       end
 
+       def trivia_4
+        @points = 0
+        @prompt = TTY::Prompt.new
+         clear_terminal
+         choices = ["England", "Germany", "Uruguay", "Brazil"]
+         choice = @prompt.select("What national club won the first world cup in the history?",
+         choices, "-> Back","-> Quit","-> Restart" )
+         divider
+           case choice
+           when "Venezuela"
+            wrong_answer
+           when "Germany"
+            wrong_answer
+           when "Brazil"
+            wrong_answer
+           when "Uruguay"
+            puts "Vamo arriba bo! The firts world cup was in Uruguay in 1930 and they won!!!" 
+            @points += 16 
+            sleep 5
+           end_game
+           when "-> Back"
+             home
+           when "-> Quit" || "QUIT"
+           when "-> Restart" || "RESTART"
+             run
+               else
+             error
+           end
+         end
 
 
 #  ------------------------------------------------ CLI ACCESSORIES METHODS -------------------------------------------------------- 
@@ -482,6 +681,29 @@ end
       pause
     end
   end
+
+  def wrong_answer
+    puts "Wrong, study more"
+    sleep 3
+    puts "Your score is #{@points}"
+    sleep 2
+    home
+  end
+
+  def correct_answer
+    @points += 16 
+    sleep 3
+    puts "Your score is #{@points}"
+    sleep 2
+    home
+  end
+
+
+   def end_game
+    puts "Awesome you have #{@points}"
+    sleep 5
+    home
+   end
 
   # def default_options
   #   choice = @prompt.select()
