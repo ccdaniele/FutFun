@@ -90,7 +90,8 @@ class League < ActiveRecord::Base
         system "clear"
         header_footer
         header_footer
-        puts "It looks like #{x[0]} saw the most action last year with #{x[1]} goals! Beat it, #{x[10]}, with your lethargic #{x[11]} goals!"
+        puts "It looks like #{x[0]} saw the most action last year with #{x[1]} goals!"
+        puts "Beat it, #{x[10]}, with your lethargic #{x[11]} goals!"
         header_footer
     end 
 
@@ -110,7 +111,8 @@ class League < ActiveRecord::Base
         x = League.most_red_cards
         header_footer
         header_footer
-        puts "Watch out for #{x[0]}: with #{x[1]} red cards, the players in that league don't mess around! But look at the nice guys in #{x[10]}! They're proof that good, clean fun isn't had by playing dirty."
+        puts "Watch out for #{x[0]}: with #{x[1]} red cards, the players in that league don't mess around!"
+        puts "But look at the nice guys in #{x[10]}! #{x[11]} red cards qualifies as G-Rated futbol."
         header_footer
     end
      

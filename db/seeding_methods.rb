@@ -1,4 +1,4 @@
-require_relative '../config/environment'
+require_relative 'config/environment'
 
 
   #           <--------api methods------->
@@ -69,6 +69,11 @@ def destroy_all
     Club.destroy_all
     Player.destroy_all
     League.destroy_all
+end
+
+def delete_player(player_name)
+    
+    
 end
 
 def create_all(league_array, season)   #all methods work
@@ -199,5 +204,3 @@ def create_player(player_id, season) #basic method retrieves a specific player's
     new_player.penalties_saved =  player_stats["response"][0]["statistics"][0]["penalty"]["saved"]
     new_player.save
     end
-
-    

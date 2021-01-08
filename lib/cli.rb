@@ -42,13 +42,13 @@ class CLI
       @prompt = TTY::Prompt.new
       clear_terminal
       divider
-      choice = @prompt.select("Hi,#{@user.name} what do you want to do today?",
-        ["Look for players information","Look for Clubs information","Look for league information", "Trivia"],"-> Quit","-> Restart" )
+      choice = @prompt.select("Hi,#{@user.name} what do you want to do today?\n",
+        ["Look for player information","Look for club information","Look for league information", "Trivia"],"-> Quit","-> Restart" )
       divider
       case choice
-      when "Look for players information"
+      when "Look for player information"
         players_home
-      when "Look for Clubs information"
+      when "Look for club information"
         club_identification
       when "Look for league information"
         leagues_home   
@@ -73,7 +73,7 @@ class CLI
   def players_home
     @prompt = TTY::Prompt.new
     clear_terminal
-    choice = @prompt.select("Tell me, #{@user.name} what player are you looking for today?",
+    choice = @prompt.select("Tell me, #{@user.name} what player are you looking for today?\n",
       ["Players resume","Top 10 scorers of the league","Top 10 goalkeepers", "Top 10 defenders", "Top 10 dangerous players"],"-> Back","-> Quit","-> Restart" )
     divider
     case choice
@@ -226,9 +226,11 @@ class CLI
   def club_identification
     clear_terminal
     divider
-    puts "Ok #{@user.name}, choose a team!!"
+    puts "Ok #{@user.name}, choose a club!!"
+    puts ""
     divider
-    puts "Type the name of the team"
+    puts "Type the name of the club"
+    puts ""
     @club_name = get_user_input
       if Club.find_club_by_name(@club_name) == nil
         clear_terminal
@@ -246,7 +248,7 @@ class CLI
     def clubs_home
        @prompt = TTY::Prompt.new
         clear_terminal
-        choice = @prompt.select("Here you have all that you need to know about #{@club_name}!!!",
+        choice = @prompt.select("Here you have all that you need to know about #{@club_name}!!!\n",
         ["About the Club","Club Stats","Club Roster", "Club Players Ratings", "Club Minutes"],"-> Back","-> Quit","-> Restart" )
         divider
           case choice
@@ -329,7 +331,8 @@ class CLI
                     def clubs_players_rating
                       clear_terminal
                       divider
-                      @club.club_ratings
+                      @club.display_ratings
+                      puts ""
                       divider
                       choice = @prompt.select("",
                             ["-> Back","-> Quit","-> Restart"])
@@ -348,7 +351,7 @@ class CLI
                         def clubs_minutes
                           clear_terminal
                           divider
-                          @club.club_minutes
+                          @club.display_club_minutes
                           divider
                           choice = @prompt.select("",
                                 ["-> Back","-> Quit","-> Restart"])
@@ -371,7 +374,7 @@ class CLI
             def leagues_home
               @prompt = TTY::Prompt.new
                clear_terminal
-               choice = @prompt.select( "Choose your leagues options!!!",
+               choice = @prompt.select( "Choose your leagues options!!!\n",
                ["League with most goals", "League with most red cards","Select my league"],"-> Back","-> Quit","-> Restart" )
                divider
                  case choice
@@ -394,7 +397,7 @@ class CLI
              def leagues_identification
               @prompt = TTY::Prompt.new
               clear_terminal
-              choice = @prompt.select("Ok #{@user_name}, choose a League!!",
+              choice = @prompt.select("Ok #{@user_name}, choose a League!!\n",
               ["Premier League","La Liga","Serie A", "Bundesliga", "MLS", "other?"],"-> Back","-> Quit","-> Restart")
               case choice
               when "Serie A"
@@ -445,7 +448,7 @@ class CLI
             def leagues_post_home
               @prompt = TTY::Prompt.new
                clear_terminal
-               choice = @prompt.select("Here you have all that you need to know about #{@league_name}!!!",
+               choice = @prompt.select("Here you have all that you need to know about #{@league_name}!!!\n",
                ["Clubs of the league stats","Clubs of the league", "Display Standings"],"-> Back","-> Quit","-> Restart" )
                divider
                  case choice
