@@ -115,6 +115,13 @@ class Club < ActiveRecord::Base
         end
         player_ratings
     end
+
+    def display_ratings
+        self.club_ratings.each do |player, rating|
+            puts "#{player}: #{rating}"
+        end
+        
+    end
    
     def sum_rating(hash)
         sum = 0
