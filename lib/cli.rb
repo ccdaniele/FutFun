@@ -132,7 +132,7 @@ class CLI
       player_info  
     else player_info = Player.all.find_by(name: "#{query}") 
     end
-    #binding.pry
+    
     clear_terminal
     divider
     choice = @prompt.select("#{player_info.name} is a great #{player_info.position} who plays in #{player_info.club_id} and has score #{player_info.goals} playing #{player_info.minutes} minutes this season. He had comitted #{player_info.fouls_committed} fouls and has #{player_info.yellow_cards} yellow cards and #{player_info.red_cards}",
@@ -250,7 +250,7 @@ class CLI
     puts "Type the name of the team"
     puts ""
     @club_name = get_user_input
-    #binding.pry
+    
     if Club.find_club_by_name(@club_name) == nil
       clear_terminal
       divider
@@ -258,7 +258,7 @@ class CLI
       divider
       puts "Type the name of the team"
       @club_name = get_user_input
-      #binding.pry
+      
       if Club.find_club_by_name(@club_name) == nil
         clear_terminal
         puts "Hey mate! that's a Rugby team"
@@ -275,32 +275,32 @@ class CLI
   end
 
   #Clubs main. displays the options for clubs
-  def clubs_home
-      @prompt = TTY::Prompt.new
-      clear_terminal
-      choice = @prompt.select("Here you have all that you need to know about #{@club_name}!!!",
-      ["About Clubs","Clubs stats","Clubs roster"],"-> Back","-> Quit","-> Restart" )
-      divider
-        case choice
-        when "About Clubs"
-          about_clubs
-        when "Clubs stats"
-          table_top_10_Goal_scores
-        when "Clubs roster"
-          table_top_10_GoalKeepers
-        when "4"
-          table_top_10_Defenders
-        when "5"
-          table_top_danger
-        when "-> Back"
-          home
-        when "-> Quit" || "QUIT"
-        when "-> Restart" || "RESTART"
-          run
-            else
-          error
-      end
-  end
+  # def clubs_home
+  #     @prompt = TTY::Prompt.new
+  #     clear_terminal
+  #     choice = @prompt.select("Here you have all that you need to know about #{@club_name}!!!",
+  #     ["About Clubs","Clubs stats","Clubs roster"],"-> Back","-> Quit","-> Restart" )
+  #     divider
+  #       case choice
+  #       when "About Clubs"
+  #         about_clubs
+  #       when "Clubs stats"
+  #         table_top_10_Goal_scores
+  #       when "Clubs roster"
+  #         table_top_10_GoalKeepers
+  #       when "4"
+  #         table_top_10_Defenders
+  #       when "5"
+  #         table_top_danger
+  #       when "-> Back"
+  #         home
+  #       when "-> Quit" || "QUIT"
+  #       when "-> Restart" || "RESTART"
+  #         run
+  #           else
+  #         error
+  #     end
+  # end
 
 
  #Clubs main. displays the options for clubs
@@ -487,7 +487,7 @@ class CLI
                            choice = @prompt.select("Here you have all that you need to know about #{@league_name}!!!",
                            ["Clubs of the league stats","Clubs of the league","Club roster", "Club red cards"],"-> Back","-> Quit","-> Restart" )
                            divider
-                           binding.pry
+                           
                              case choice
                              when "Clubs of the league stats"
                               clubs_of_the_league_stats
@@ -510,7 +510,7 @@ class CLI
                            def clubs_of_the_league_stats
                             clear_terminal
                             divider
-                            binding.pry
+                            
                             @league.league_clubs_stats
                             divider
                             choice = @prompt.select("",
@@ -529,7 +529,7 @@ class CLI
                               def clubs_of_the_league
                                 clear_terminal
                                 divider
-                                binding.pry
+                                
                                 @league.league_clubs_stats
                                 divider
                                 choice = @prompt.select("",
@@ -549,7 +549,7 @@ class CLI
                                   def clubs_of_the_league
                                     clear_terminal
                                     divider
-                                    binding.pry
+                                    
                                     @league.league_clubs_stats
                                     divider
                                     choice = @prompt.select("",
@@ -791,7 +791,7 @@ def trivia_1
             #   puts "Enter the name of the player"
             #   query = get_user_input
             #   player_info = Player.all.find_by(name: "#{query}")
-            #   #binding.pry
+            #   #
             #   clear_terminal
             #   divider
             #   puts "#{player_info.name} is a great #{player_info.position} who plays in #{player_info.club_id} and has score #{player_info.goals} playing #{player_info.minutes} minutes this season"
