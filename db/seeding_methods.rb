@@ -1,3 +1,9 @@
+require_relative 'config/environment'
+
+
+  #           <--------api methods------->
+
+
 def call(url)
     http = Net::HTTP.new(url.host, url.port)
     http.use_ssl = true
@@ -9,16 +15,8 @@ def call(url)
     JSON(response.read_body)
 end
 
-def call_league(league, season)     #basic team data, teams in a league for a season
-    call(URI("https://v3.football.api-sports.io/teams?league=#{league}&season=#{season}"))
-end
-
 def call_club_stats(club, league, season)
     x  = call(URI("https://v3.football.api-sports.io/teams/statistics?league=#{league}&team=#{club}&season=#{season}"))
-end
-
-def call_league_by_id(id, season)
-    call(URI("https://v3.football.api-sports.io/teams?league=#{id}&season=#{season}"))
 end
 
 def call_custom_league(league, season)
@@ -65,7 +63,6 @@ def league_selection(league)
     l
 end
 
-
   #           <--------create methods-------> 
 
 def destroy_all
@@ -81,7 +78,7 @@ def create_all(league_array, season)   #all methods work
     create_club_stats_across_leagues(league_array, season)
 end
 
-def create_leagues_ids   #good     #populates with leagues, their ids and basic data
+def create_leagues_ids(league_array)   #good     #populates with leagues, their ids and basic data
     url = URI("https://v3.football.api-sports.io/leagues?type=league")
     x = call(url)
     x["response"].each do |league|
@@ -89,7 +86,9 @@ def create_leagues_ids   #good     #populates with leagues, their ids and basic 
         name = league["league"]["name"]
         country = league["country"]["name"]
         stats_since = league["seasons"][0]["year"]
-        League.find_or_create_by(league_id: league_id, name: name, country: country)
+        if league_array.include?(league_id)
+            League.find_or_create_by(league_id: league_id, name: name, country: country)
+        end
     end
 end
 
@@ -160,3 +159,43 @@ def create_players_across_leagues(league_array, season)      #in create_all
 end
 
 def create_player(player_id, season) #basic method retrieves a specific player's data
+    
+    player_stats = call_player(player_id, season)
+    player_id = player_stats["parameters"]["id"]
+    season = player_stats["parameters"]["season"]
+    new_player = Player.find_or_create_by(player_id: player_id)
+    new_player.name = player_stats["response"][0]["player"]["name"]
+    new_player.club_id = player_stats["response"][0]["statistics"][0]["team"]["id"]
+    new_player.age = player_stats["response"][0]["player"]["age"]
+    new_player.height = player_stats["response"][0]["player"]["height"]
+    new_player.weight = player_stats["response"][0]["player"]["weight"]
+    new_player.appearances =  player_stats["response"][0]["statistics"][0]["games"]["appearences"]
+    new_player.minutes =  player_stats["response"][0]["statistics"][0]["games"]["minutes"]
+    new_player.position =  player_stats["response"][0]["statistics"][0]["games"]["position"]
+    new_player.rating =  player_stats["response"][0]["statistics"][0]["games"]["rating"]
+    new_player.shots =  player_stats["response"][0]["statistics"][0]["shots"]["total"]
+    new_player.shots_on_target =  player_stats["response"][0]["statistics"][0]["shots"]["on"]
+    new_player.goals =  player_stats["response"][0]["statistics"][0]["goals"]["total"]
+    new_player.goals_conceded =  player_stats["response"][0]["statistics"][0]["goals"]["conceded"]
+    new_player.goals_saved =  player_stats["response"][0]["statistics"][0]["goals"]["saves"]
+    new_player.assists =  player_stats["response"][0]["statistics"][0]["goals"]["assists"]
+    new_player.passes =  player_stats["response"][0]["statistics"][0]["passes"]["total"]
+    new_player.pass_accuracy =  player_stats["response"][0]["statistics"][0]["passes"]["accuracy"]
+    new_player.tackles =  player_stats["response"][0]["statistics"][0]["tackles"]["total"]
+    new_player.blocks =  player_stats["response"][0]["statistics"][0]["tackles"]["blocks"]
+    new_player.interceptions =  player_stats["response"][0]["statistics"][0]["tackles"]["interceptions"]
+    new_player.duels =  player_stats["response"][0]["statistics"][0]["duels"]["total"]
+    new_player.duels_won =  player_stats["response"][0]["statistics"][0]["duels"]["won"]
+    new_player.dribbles_attempted =  player_stats["response"][0]["statistics"][0]["dribbles"]["attempts"]
+    new_player.dribbles_successful =  player_stats["response"][0]["statistics"][0]["dribbles"]["success"]
+    new_player.fouls_drawn =  player_stats["response"][0]["statistics"][0]["fouls"]["drawn"]
+    new_player.fouls_committed =  player_stats["response"][0]["statistics"][0]["fouls"]["committed"]
+    new_player.yellow_cards =  player_stats["response"][0]["statistics"][0]["cards"]["yellow"]
+    new_player.red_cards =  player_stats["response"][0]["statistics"][0]["cards"]["red"]
+    new_player.penalties_won =  player_stats["response"][0]["statistics"][0]["penalty"]["won"]
+    new_player.penalties_committed =  player_stats["response"][0]["statistics"][0]["penalty"]["committed"]
+    new_player.penalties_scored =  player_stats["response"][0]["statistics"][0]["penalty"]["scored"]
+    new_player.penalties_missed =  player_stats["response"][0]["statistics"][0]["penalty"]["missed"]
+    new_player.penalties_saved =  player_stats["response"][0]["statistics"][0]["penalty"]["saved"]
+    new_player.save
+    end

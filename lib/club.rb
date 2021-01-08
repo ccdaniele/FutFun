@@ -12,11 +12,11 @@ class Club < ActiveRecord::Base
         Club.find_by(club_id: club_id).name
     end
 
-    
     def club_info
         system "clear"
         header_footer
         line_formatting(25)
+        puts ""
         puts "Name: #{self.name}"
         puts ""
         puts "Country: #{self.country}"
@@ -69,12 +69,16 @@ class Club < ActiveRecord::Base
     end
 
     def roster_names
-        self.players.each {|player| puts player.name}
+        self.players.each do |player| 
+            system "clear"
+            puts ""
+            puts player.name
+            puts ""
+        end
     end
     
     def club_red_cards   #helper method for #most_red_cards in League
         cards = 0
-        
         self.players.each do |player|
             if !player.red_cards
                 player.red_cards = 0
@@ -85,13 +89,12 @@ class Club < ActiveRecord::Base
     end
 
     def club_minutes     #helper method for #most_minutes in League
-        minutes = 0
+        player_minutes = {}
         self.players.each do |player|
-            if !player.data
-                player.data = 0
+            if !player.minutes
+                player.minutes = 0
             end
-            binding.pry
-            variable += player.data     
+              
         end
         variable
     end
@@ -120,18 +123,17 @@ class Club < ActiveRecord::Base
 
     def player_goal_percentage #not done!
         player_hash = {}
-        player_average_hash = {}
-        club_goals = self.goals_for
+        player_percentage_hash = {}
+        club_goals = self.goals_for.to_f
         self.players.each do |player|
             player_hash[player.name] = player.goals 
         end
-        player_hash.map {|player, goals| player_average_hash[player] = goals/club_goals}
-
+        player_hash.map do |player, goals| 
+        
+            x = player_percentage_hash[player] = (goals/club_goals) * 100
+        end
+        player_percentage_hash
     end
-
-   
-
- 
 end
 
 def sum_rating(hash)

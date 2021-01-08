@@ -170,6 +170,18 @@ class Player < ActiveRecord::Base
 
 end
 
+def find_a_players_team_by_name(player) 
+    if Player.find_by(name: "#{player}")
+        Player.find_by(name: "#{player}").club.name
+    else
+        puts "Sorry, we cannot find your player!"
+    end
+end
+
+def find_a_player_by_name(name)
+    id = Player.find_by(name: "#{name}").player_id
+    call_player(id)
+end
 
 
 
