@@ -32,16 +32,8 @@ def call(url)
     JSON(response.read_body)
 end
 
-def call_league(league, season)     #basic team data, teams in a league for a season
-    call(URI("https://v3.football.api-sports.io/teams?league=#{league}&season=#{season}"))
-end
-
 def call_club_stats(club, league, season)
     x  = call(URI("https://v3.football.api-sports.io/teams/statistics?league=#{league}&team=#{club}&season=#{season}"))
-end
-
-def call_league_by_id(id, season)
-    call(URI("https://v3.football.api-sports.io/teams?league=#{id}&season=#{season}"))
 end
 
 def call_custom_league(league, season)
@@ -121,7 +113,7 @@ def create_all(league_array, season)   #all methods work
     create_club_stats_across_leagues(league_array, season)
 end
 
-def create_leagues_ids   #good     #populates with leagues, their ids and basic data
+def create_leagues_ids(league_array)   #good     #populates with leagues, their ids and basic data
     url = URI("https://v3.football.api-sports.io/leagues?type=league")
     x = call(url)
     x["response"].each do |league|
@@ -129,7 +121,9 @@ def create_leagues_ids   #good     #populates with leagues, their ids and basic 
         name = league["league"]["name"]
         country = league["country"]["name"]
         stats_since = league["seasons"][0]["year"]
-        League.find_or_create_by(league_id: league_id, name: name, country: country)
+        if league_array.include?(league_id)
+            League.find_or_create_by(league_id: league_id, name: name, country: country)
+        end
     end
 end
 
@@ -322,5 +316,5 @@ def create_player(player_id, season) #basic method retrieves a specific player's
     end
  
 
-binding.pry
-    
+
+    binding.pry
