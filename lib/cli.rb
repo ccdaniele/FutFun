@@ -1,12 +1,14 @@
-
+require "tty-prompt"
 class CLI 
-    def run
+  @prompt = TTY::Prompt.new
+  
+  def run
       sign_in
       home
     end
 
-   
-    # Identify / create a new User
+
+    #Identify / create a new User
     def sign_in
       clear_terminal
       puts "|||||||  |||||||"
@@ -22,35 +24,40 @@ class CLI
       @user = User.find_or_create_by(name: username)
     end
 
+
+
     # Main menu shows the 3 main categories to the user 
     def home
+      @prompt = TTY::Prompt.new
       clear_terminal
-      puts "Hi #{@user.name}, what do you want to do today?"
       divider
-      puts "Select from the items below:"
-      puts "1) Look for players information"
-      puts "2) Look for teams information"
-      puts "3) Look for league information"
-      puts "\n ~~ (Q)uit or (R)estart ~~" 
-  
-      choice = get_user_input.upcase
-      
-      case choice
-      when "1"
+      @prompt.select("Hi,#{@user.name} what do you want to do today?",
+        ["Look for players information","Look for Clubs information","Look for league information"])
+      divider
+      if "Look for players information"
         players_home
-      when "2"
-        club_identification
-      when "3"
-        league_home
-      when "Q" || "QUIT"
-      when "R" || "RESTART"
-        run
-      else
-        puts "Oops try again..."
-        pause
-        home
       end
+      if "Look for Clubs information"
+        club_identification
+      end
+      if "Look for league information"
+        league_home
+      end
+
     end
+    #   when "2"
+    #     club_identification
+    #   when "3"
+    #     league_home
+    #   when "Q" || "QUIT"
+    #   when "R" || "RESTART"
+    #     run
+    #   else
+    #     puts "Oops try again..."
+    #     pause
+    #     home
+    #   end
+    # end
 
   #  ------------------------------------------------ PLAYERS CATEGORY -------------------------------------------------------- 
     
@@ -292,7 +299,7 @@ def clubs_home
     end
 
 
-    #  ------------------------------------------------ ABORT USERS METHODS -------------------------------------------------------- 
+    #  ------------------------------------------------ ABORT METHODS -------------------------------------------------------- 
 
   # return a list of the players that the user storaged in his list
 
@@ -329,5 +336,40 @@ def clubs_home
             #       run
             #     else
             #       error
+            #   end
+            # end
+
+
+
+            # def home
+            #   @prompt = TTY::Prompt.new
+            #   clear_terminal
+            #   divider
+            #   @prompt.select("Hi, what do you want to do today?",
+            #     ["Look for players information","Look for teams information","Look for league information"])
+            #   puts "Hi #{@user.name}, what do you want to do today?"
+            #   divider
+            #   puts "Select from the items below:"
+            #   puts "1) Look for players information"
+            #   puts "2) Look for teams information"
+            #   puts "3) Look for league information"
+            #   puts "\n ~~ (Q)uit or (R)estart ~~" 
+          
+            #   choice = get_user_input.upcase
+              
+            #   case choice
+            #   when "1"
+            #     players_home
+            #   when "2"
+            #     club_identification
+            #   when "3"
+            #     league_home
+            #   when "Q" || "QUIT"
+            #   when "R" || "RESTART"
+            #     run
+            #   else
+            #     puts "Oops try again..."
+            #     pause
+            #     home
             #   end
             # end
