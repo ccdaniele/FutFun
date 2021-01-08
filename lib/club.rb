@@ -12,11 +12,11 @@ class Club < ActiveRecord::Base
         Club.find_by(club_id: club_id).name
     end
 
-    
     def club_info
         system "clear"
         header_footer
         line_formatting(25)
+        puts ""
         puts "Name: #{self.name}"
         puts ""
         puts "Country: #{self.country}"
@@ -74,7 +74,6 @@ class Club < ActiveRecord::Base
     
     def club_red_cards   #helper method for #most_red_cards in League
         cards = 0
-        
         self.players.each do |player|
             if !player.red_cards
                 player.red_cards = 0
@@ -85,13 +84,12 @@ class Club < ActiveRecord::Base
     end
 
     def club_minutes     #helper method for #most_minutes in League
-        minutes = 0
+        player_minutes = {}
         self.players.each do |player|
-            if !player.data
-                player.data = 0
+            if !player.minutes
+                player.minutes = 0
             end
-            binding.pry
-            variable += player.data     
+             += player.data     
         end
         variable
     end
@@ -126,12 +124,7 @@ class Club < ActiveRecord::Base
             player_hash[player.name] = player.goals 
         end
         player_hash.map {|player, goals| player_average_hash[player] = goals/club_goals}
-
     end
-
-   
-
- 
 end
 
 def sum_rating(hash)
