@@ -94,11 +94,69 @@ class Player < ActiveRecord::Base
         players.sort_by {|player, danger_points| danger_points}.reverse.first(10)
       
     end
-    #binding.pry
-    
 
+    def player_info
+        club = Club.club_name_from_id(self.club_id)
+        header_footer
+        line_formatting(22)
+        puts "Name: #{self.name}"
+        puts "Position: #{position}"
+        puts "Club: #{club}"
+        puts "Age: #{self.age}"
+        puts "Height: #{self.height}"
+        puts "Weight: #{self.weight}"
+        line_formatting(22)
+        header_footer
+    end
 
+    def player_stats        
+        club = Club.club_name_from_id(self.club_id)
+        header_footer
+        line_formatting(22)
+        puts "Name: #{self.name}"
+        puts "Club: #{club}"
+        puts "Rating: #{rating}"
+        puts "Appearances: #{self.appearances}"
+        puts "Minutes Played: #{self.minutes}"
+        if self.position == "Goalkeeper"
+            self.goalkeeper_stats
+        else
+            self.field_player_stats
+        end   
+        line_formatting(22)
+        header_footer
+    end
 
+    def field_player_stats
+        puts "Shots: #{self.shots}"
+        puts "Shots on Target: #{self.shots_on_target}"
+        puts "Goals: #{self.goals}"
+        puts "Assists: #{self.assists}"
+        puts "Passes: #{self.passes}"
+        puts "Tackles: #{self.tackles}"
+        puts "Interceptions: #{self.interceptions}"
+        puts "Duels: #{self.duels}"
+        puts "Duels Won: #{self.duels_won}"
+        puts "Dribbles Attempted: #{self.dribbles_attempted}"
+        puts "Successful Dribbles: #{self.dribbles_successful}"
+        puts "Fouls Drawn: #{self.fouls_drawn}"
+        puts "Fouls Committed: #{self.fouls_committed}"
+        puts "Penalties Won: #{self.penalties_won}"
+        puts "Penalties Committed: #{self.penalties_committed}"
+        puts "Penalties Scored: #{self.penalties_scored}"
+        puts "Penalties Missed: #{self.penalties_missed}"
+        puts "Yellow Cards: #{self.yellow_cards}"
+        puts "Red Cards: #{self.red_cards}"
+    end
+
+    def goalkeeper_stats
+        puts "Goals Conceded: #{self.goals_conceded}"
+        puts "Goals Saved: #{self.goals_saved}"
+        puts "Penalties Committed: #{self.penalties_committed}"
+        puts "Penalties Saved: #{self.penalties_saved}"
+        puts "Yellow Cards: #{self.yellow_cards}"
+        puts "Red Cards: #{self.red_cards}"
+    end
 
 
 

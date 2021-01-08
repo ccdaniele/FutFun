@@ -114,7 +114,7 @@ class League < ActiveRecord::Base
         League.all.each do |league|
             clean_sheets = 0
             league.clubs.each do |club|
-                clean_sheets += club.clean_sheets
+                clean_sheets += club.club_specific_data(clean_sheets) 
             end
             league_clean_sheets[league.name] = clean_sheets
         end 
@@ -129,6 +129,17 @@ class League < ActiveRecord::Base
         puts "It looks like #{x[0]} had the most clean sheets with #{x[1]}--they really have the cleanest sheets!"
         header_footer
     end
+
+    def most_minutes
+            self.clubs.each do |club|
+                binding.pry
+                club.players.each do |player|
+                binding.pry
+                end
+            end
+
+    end
+
 
 end
 
