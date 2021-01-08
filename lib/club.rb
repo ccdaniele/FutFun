@@ -4,13 +4,14 @@ class Club < ActiveRecord::Base
     
     self.primary_key = "club_id"
 
-    def initialize()
-
+    def self.find_club_by_name(name)
+        Club.all.find_by(name: name)
     end
 
     def club_info
         system "clear"
-        
+        header_footer
+        line_formatting(25)
         puts "Name: #{self.name}"
         puts ""
         puts "Country: #{self.country}"
@@ -19,17 +20,17 @@ class Club < ActiveRecord::Base
         puts ""
         puts "Stadium: #{self.stadium}"
         puts ""
-        
+        line_formatting(25)
+        header_footer
     end
 
     def club_data
 
         system "clear"
 
-        puts "#{self.name} "
-        puts ""
-        puts "  2019 Season Form  " 
-        puts "------------------- "
+        space_formatting(self.name, 18)
+        space_formatting("2019 Season Form", 18) 
+        line_formatting(18)
         puts ""
         puts " Games Played:   #{self.played} "
         puts " Wins:           #{self.wins} "
@@ -43,17 +44,19 @@ class Club < ActiveRecord::Base
     end
 
     def club_stats
-        x = self.name.length
-        puts "--".insert(0, "-" * x)
-        puts " Wins: #{club.wins}"
-        puts " Draws: #{club.draws}"
-        puts " Losses: #{club.losses}"
-        puts " Goals For: #{club.goals_for}"
-        puts " Goals Against: #{club.goals_against}"
-        puts " Clean Sheets: #{club.clean_sheets}"
-        puts " Goals Denied: #{club.failed_to_score}"
-        puts ""
-        puts ""
+        header_footer
+        space_formatting("2019", 18)
+        space_formatting(self.name, 18)
+        line_formatting(18)
+        puts " Wins: #{self.wins}"
+        puts " Draws: #{self.draws}"
+        puts " Losses: #{self.losses}"
+        puts " Goals For: #{self.goals_for}"
+        puts " Goals Against: #{self.goals_against}"
+        puts " Clean Sheets: #{self.clean_sheets}"
+        puts " Goals Denied: #{self.failed_to_score}"
+        line_formatting(18)
+        header_footer
     end
 
     def roster
@@ -64,5 +67,26 @@ class Club < ActiveRecord::Base
         self.players.each {|player| puts player.name}
     end
  
+end
 
+
+#------- For Formatting ------
+
+def dependent_line_formatting(type)
+    x = type.length
+    puts "--".insert(0, "-" * x)
+end
+
+def line_formatting(spaces)
+    puts "--".insert(0, "-" *spaces)
+end
+
+def space_formatting(type, spaces)
+    x = (spaces - type.length) / 2
+    puts type.insert(0, " "* x)
+end
+
+def header_footer
+    puts ""
+    puts ""
 end

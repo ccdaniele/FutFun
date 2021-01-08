@@ -322,5 +322,5 @@ def create_player(player_id, season) #basic method retrieves a specific player's
     end
  
 
-
+binding.pry
     

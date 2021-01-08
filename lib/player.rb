@@ -8,8 +8,6 @@ class Player < ActiveRecord::Base
         self.find_by(name: name)
     end
 
-<<<<<<< HEAD
-=======
 
     def self.top_goals
         players = {}
@@ -22,24 +20,20 @@ class Player < ActiveRecord::Base
         players.sort_by {|player, goals| goals}.reverse.first(10)
         
     end
-#binding.pry
 
-end
 
-def self.top_goalkeeper
-    players = {}
-    Player.all.each do |player|
-        if !player.goals
-            player.goals = 0
+
+    def self.top_goalkeeper
+        players = {}
+        Player.all.each do |player|
+            if !player.goals
+                player.goals = 0
+            end
+            players[player.name] = player.goals
         end
-        players[player.name] = player.goals
+        players.sort_by {|player, goals| goals}.reverse.first(10)
+        
     end
-    players.sort_by {|player, goals| goals}.reverse.first(10)
-    
-end
-#binding.pry
->>>>>>> 06762331f8352db3cab24dd0db62f28b605390d0
-
 end
 
 

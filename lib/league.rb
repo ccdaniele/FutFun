@@ -5,21 +5,31 @@ class League < ActiveRecord::Base
 
     self.primary_key = "league_id"
 
-    def self.clubs(league)
-        League.find(league).clubs.map do |club_a, club_b|
-            binding.pry
-             club_a.name <=> club_b.name
+    def self.all_league_names
+        League.all
+    end
+
+    def self.find_league(league)
+        League.find_by(name: league)
+    end
+
+    def self.populated_leagues
+        League.all.select {|league| league.clubs.count > 0}
+    end
+
+    def clubs
+        self.clubs.map do |club_a, club_b|
         end
     end
 
-    def self.club_names(league)
-        League.find(league).clubs.map do |club| 
-            club.name
+    def club_names
+        self.clubs.map do |club| 
+            puts club.name
         end
     end
 
-    def self.league_clubs_stats(league_id)
-        League.find(league).clubs.each do |club|
+    def league_clubs_stats
+        self.clubs.each do |club|
             puts " #{club.name} "
             x = club.name.length
             puts "--".insert(0, "-" * x)
@@ -35,9 +45,10 @@ class League < ActiveRecord::Base
         end
     end
 
-    def self.calculate_standings(league_id)
+
+    def calculate_standings
         clubs = {}
-        League.find(league_id).clubs.each do |club|
+        self.clubs.each do |club|
             points = 0
             points += club.wins * 3
             points += club.draws * 1      
@@ -48,25 +59,26 @@ class League < ActiveRecord::Base
         
     end
 
-    def self.display_standings(league)
+
+    def display_standings
         system "clear"
-        table = League.calculate_standings(league)
-        table.each do |club, points|
+        self.each do |club, points|
             puts club.name
         end
     end
 
-     def self.top_teams(league)
-        League.calculate_standings(league).first(3)
+
+
+     def top_clubs   # needs method for order
+        self.clubs.first(3)
      end
      
-     def self.top_teams_stats(league)
-        League.top_teams(league).each do 
-
-        end
+     def top_clubs_stats
+        self.top_clubs.each {|club| puts club_stats }
      end
 
+     
     
-
 end
+
 
