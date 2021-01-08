@@ -4,63 +4,89 @@ class Club < ActiveRecord::Base
     
     self.primary_key = "club_id"
 
-    def self.club_info(club)
-        club = self.find_by(name: club)
-        
-        system "clear"
-        
-        puts "Name: #{club.name}"
-        puts ""
-        puts "Country: #{club.country}"
-        puts ""
-        puts "City: #{club.city}"
-        puts ""
-        puts "Stadium: #{club.stadium}"
-        puts ""
-        
+    def self.find_club_by_name(name)
+        Club.all.find_by(name: name)
     end
 
-    def self.club_stats(club)
-        club = Club.find_by(name: club)
+    def club_info
+        system "clear"
+        header_footer
+        line_formatting(25)
+        puts "Name: #{self.name}"
+        puts ""
+        puts "Country: #{self.country}"
+        puts ""
+        puts "City: #{self.city}"
+        puts ""
+        puts "Stadium: #{self.stadium}"
+        puts ""
+        line_formatting(25)
+        header_footer
+    end
+
+    def club_data
+
+        system "clear"
+
+        space_formatting(self.name, 18)
+        space_formatting("2019 Season Form", 18) 
+        line_formatting(18)
+        puts ""
+        puts " Games Played:   #{self.played} "
+        puts " Wins:           #{self.wins} "
+        puts " Draws:          #{self.draws} "
+        puts " Losses:         #{self.losses} " 
+        puts " Goals For:      #{self.goals_for} " 
+        puts " Goals Against:  #{self.goals_against} "
+        puts " Clean Sheets:   #{self.clean_sheets} "
+        puts " No Goals:       #{self.failed_to_score} "
+        puts ""
+    end
+
+    def club_stats
+        header_footer
+        space_formatting("2019", 18)
+        space_formatting(self.name, 18)
+        line_formatting(18)
+        puts " Wins: #{self.wins}"
+        puts " Draws: #{self.draws}"
+        puts " Losses: #{self.losses}"
+        puts " Goals For: #{self.goals_for}"
+        puts " Goals Against: #{self.goals_against}"
+        puts " Clean Sheets: #{self.clean_sheets}"
+        puts " Goals Denied: #{self.failed_to_score}"
+        line_formatting(18)
+        header_footer
+    end
+
+    def roster
+        self.players
+    end
+
+    def roster_names
+        self.players.each {|player| puts player.name}
+    end
  
-        system "clear"
+end
 
-        puts "#{club.name} "
-        puts ""
-        puts "  2019 Season Form  " 
-        puts "------------------- "
-        puts ""
-        puts " Games Played:   #{club.played} "
-        puts " Wins:           #{club.wins} "
-        puts " Draws:          #{club.draws} "
-        puts " Losses:         #{club.losses} " 
-        puts " Goals For:      #{club.goals_for} " 
-        puts " Goals Against:  #{club.goals_against} "
-        puts " Clean Sheets:   #{club.clean_sheets} "
-        puts " No Goals:       #{club.failed_to_score} "
-        puts ""
-    end
 
-    def club_stats(club)
-        puts " #{club.name} "
-        x = club.name.length
-        puts "--".insert(0, "-" * x)
-        puts " Wins: #{club.wins}"
-        puts " Draws: #{club.draws}"
-        puts " Losses: #{club.losses}"
-        puts " Goals For: #{club.goals_for}"
-        puts " Goals Against: #{club.goals_against}"
-        puts " Clean Sheets: #{club.clean_sheets}"
-        puts " Goals Denied: #{club.failed_to_score}"
-        puts ""
-        puts ""
-    end
+#------- For Formatting ------
 
-    def self.club_roster(club)
-        club = Club.find_by(name: club)
-        club.players
-    end
+def dependent_line_formatting(type)
+    x = type.length
+    puts "--".insert(0, "-" * x)
+end
 
-    
+def line_formatting(spaces)
+    puts "--".insert(0, "-" *spaces)
+end
 
+def space_formatting(type, spaces)
+    x = (spaces - type.length) / 2
+    puts type.insert(0, " "* x)
+end
+
+def header_footer
+    puts ""
+    puts ""
 end
