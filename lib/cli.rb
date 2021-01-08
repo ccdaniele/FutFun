@@ -410,7 +410,7 @@ class CLI
                         @prompt = TTY::Prompt.new
                         clear_terminal
                         choice = @prompt.select("Ok #{@user_name}, choose a League!!",
-                        ["Premier League","La Liga","Calcio", "Bundesliga", "MLS", "other?"],"-> Back","-> Quit","-> Restart")
+                        ["Premier League","La Liga","Serie A", "Bundesliga", "MLS", "other?"],"-> Back","-> Quit","-> Restart")
                         case choice
                         when "Premier League"
                           @league_name = "Premier League"
@@ -437,7 +437,7 @@ class CLI
                           end
                           leagues_home
                         when "Bundesliga"
-                          @league_name  = "Bundesliga"
+                          @league_name  = "Bundesliga 1"
                           if League.find_league(@league_name) == nil
                             clear_terminal
                             puts "Hey! esto no es Baseball papi"
@@ -449,7 +449,7 @@ class CLI
                           end
                           leagues_home
                         when "MLS"
-                          "MLS"
+                          "Major League Soccer"
                         when "other?"
                           puts "Type the name of the league"
                           @league_name = get_user_input
@@ -506,6 +506,8 @@ class CLI
                                error
                              end
                            end
+
+
                         
                            def clubs_of_the_league_stats
                             clear_terminal
@@ -529,8 +531,8 @@ class CLI
                               def clubs_of_the_league
                                 clear_terminal
                                 divider
-                                
-                                @league.league_clubs_stats
+                                binding.pry
+                                @league.club_names
                                 divider
                                 choice = @prompt.select("",
                                       ["-> Back","-> Quit","-> Restart"])
