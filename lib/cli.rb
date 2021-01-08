@@ -487,7 +487,7 @@ class CLI
                            choice = @prompt.select("Here you have all that you need to know about #{@league_name}!!!",
                            ["Clubs of the league stats","Clubs of the league","Club roster", "Club red cards"],"-> Back","-> Quit","-> Restart" )
                            divider
-                           binding.pry
+                           #binding.pry
                              case choice
                              when "Clubs of the league stats"
                               clubs_of_the_league_stats
@@ -512,7 +512,7 @@ class CLI
                            def clubs_of_the_league_stats
                             clear_terminal
                             divider
-                            binding.pry
+                            #binding.pry
                             @league.league_clubs_stats
                             divider
                             choice = @prompt.select("",
