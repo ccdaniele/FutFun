@@ -52,7 +52,7 @@ class CLI
       end
     end
 
-      #  ----- PLAYERS CATEGORY -------  
+  #  ------------------------------------------------ PLAYERS CATEGORY -------------------------------------------------------- 
     
       #Players main. User selects or search for new player
       
@@ -90,9 +90,7 @@ class CLI
           end
         end
 
-
-    
-      
+            # Player_info Display a resume of the player that the user selects tipying the name.
 
             def player_info
               
@@ -109,7 +107,7 @@ class CLI
               default_options
                
             end
-
+            # Top ten ten golies calls the method top_goals from players
             def table_top_10_Goal_scores
               i=1
               clear_terminal
@@ -122,6 +120,7 @@ class CLI
               default_options
             end
 
+            # Top ten ten Goalkeepers the method top_goalkeeper from players
 
             def table_top_10_GoalKeepers
               i=1
@@ -134,6 +133,8 @@ class CLI
               divider
               default_options
             end
+            
+            # Calls the method top_defenders from players
 
             def table_top_10_Defenders
               i=1
@@ -146,6 +147,7 @@ class CLI
               divider
               default_options
             end
+            # Calls the method top_danger from players
 
             def table_top_danger
               i=1
@@ -159,35 +161,22 @@ class CLI
               default_options
             end
               
-            #   clear_terminal
-            #   puts "Enter the name of the player"
-            #   query = get_user_input
-            #   player_info = Player.all.find_by(name: "#{query}")
-            #   #binding.pry
-            #   clear_terminal
-            #   divider
-            #   puts "#{player_info.name} is a great #{player_info.position} who plays in #{player_info.club_id} and has score #{player_info.goals} playing #{player_info.minutes} minutes this season"
-            #   puts "#{player_info.name} had comitted #{player_info.fouls_committed} fouls and has #{player_info.yellow_cards} yellow cards and #{player_info.red_cards}"
-            #   divider
-            #   puts "\n ** Add this player to your list?  PRESS (A) **"
-            #   puts "\n ** (1)Back **"
-            #   puts "\n ~~ (Q)uit or (R)estart ~~" 
-              
-            #   choice = get_user_input.upcase
-            #   case choice
-            #     when "B"
-            #      home
-            #     when "A"
-            #       query = @user.
-            #     when "Q" || "QUIT"
-            #     when "R" || "RESTART"
-            #       run
-            #     else
-            #       error
-            #   end
-            # end
+ #  ------------------------------------------------ CLUBS ------------------------------------------------------------------------- 
 
 
+
+
+
+
+
+
+
+
+ 
+
+
+
+#  ------------------------------------------------ CLI ACCESSORIES METHODS -------------------------------------------------------- 
 
   
     def error
@@ -232,6 +221,9 @@ class CLI
       end
     end
 
+
+    #  ------------------------------------------------ ABORT USERS METHODS -------------------------------------------------------- 
+
   # return a list of the players that the user storaged in his list
 
             # def my_players
@@ -240,4 +232,32 @@ class CLI
             #   puts "#{User.players.map{|u|u.name}}"
 
             #   divider
+            # end
+
+                       #   clear_terminal
+            #   puts "Enter the name of the player"
+            #   query = get_user_input
+            #   player_info = Player.all.find_by(name: "#{query}")
+            #   #binding.pry
+            #   clear_terminal
+            #   divider
+            #   puts "#{player_info.name} is a great #{player_info.position} who plays in #{player_info.club_id} and has score #{player_info.goals} playing #{player_info.minutes} minutes this season"
+            #   puts "#{player_info.name} had comitted #{player_info.fouls_committed} fouls and has #{player_info.yellow_cards} yellow cards and #{player_info.red_cards}"
+            #   divider
+            #   puts "\n ** Add this player to your list?  PRESS (A) **"
+            #   puts "\n ** (1)Back **"
+            #   puts "\n ~~ (Q)uit or (R)estart ~~" 
+              
+            #   choice = get_user_input.upcase
+            #   case choice
+            #     when "B"
+            #      home
+            #     when "A"
+            #       query = @user.
+            #     when "Q" || "QUIT"
+            #     when "R" || "RESTART"
+            #       run
+            #     else
+            #       error
+            #   end
             # end
