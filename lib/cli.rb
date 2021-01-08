@@ -11,18 +11,27 @@ class CLI
     #Identify / create a new User
   def sign_in
       clear_terminal
-      puts "||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||"
-      puts "     ()      |||  ||||  ||      ||      |||  ||||  ||||     ||||||||||"            
-      puts "   /|||  |||||||  ||||  ||||  ||||  |||||||  ||||  ||||  |   ||||||||   "
-      puts "    |||      |||  ||||  ||||  ||||      |||  ||||  ||||  ||    "
-      puts "    |||  |||||||  ||||  ||||  ||||  |||||||  ||||  ||||  |||   |"
-      puts "   /  |  |||||||  ||||  ||||  ||||  |||||||  ||||  ||||  |||   |"
-      puts "   |  |  ||||||||      |||||  ||||  ||||||||      |||||  ||||  |"
-      puts "  0   ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||"
-      puts "|||||||||by Fujita - Calderon|||||||||||||||||||||||"
-      puts "Hello, welcome to FUTFUN the home of the 10.000 soccer stats!"
-      divider
-      puts "Please enter your USERNAME or type to create a new one"
+      puts "||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||"
+      sleep 0.3
+      puts "           ()      |||  ||||  ||      ||      |||  ||||  ||||   ||||  ||||||"            
+      sleep 0.3
+      puts "         /|||  |||||||  ||||  ||||  ||||  |||||||  ||||  ||||  |  ||  ||||||"
+      sleep 0.3
+      puts "          |||      |||  ||||  ||||  ||||      |||  ||||  ||||  ||  |  ||||||"
+      sleep 0.3
+      puts "          |||  |||||||  ||||  ||||  ||||  |||||||  ||||  ||||  |||    ||||||"
+      sleep 0.3
+      puts "         /  |  |||||||  ||||  ||||  ||||  |||||||  ||||  ||||  ||||   ||||||"
+      sleep 0.3
+      puts "         |  |  ||||||||      |||||  ||||  ||||||||      |||||  |||||  ||||||"
+      sleep 0.3
+      puts "        0   ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||"
+      sleep 0.3
+      puts "|||||||||||||||||||||||||||||by Fujita - Calderon|||||||||||||||||||||||||||"
+      puts "\n"
+      puts "      Hello, welcome to FUTFUN the home of the 10.000 soccer stats!"
+      puts "\n"
+      puts "        Please enter your USERNAME or type to create a new one"
       username = get_user_input
       @user = User.find_or_create_by(name: username)
   end
