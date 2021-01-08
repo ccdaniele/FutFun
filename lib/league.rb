@@ -31,8 +31,7 @@ class League < ActiveRecord::Base
             puts " Goals Against: #{club.goals_against}"
             puts " Clean Sheets: #{club.clean_sheets}"
             puts " Goals Denied: #{club.failed_to_score}"
-            puts ""
-            puts ""
+            header_footer
         end
     end
 
@@ -63,9 +62,8 @@ class League < ActiveRecord::Base
      end
      
     def top_clubs_stats
-        self.top_clubs.each {|club| puts club_stats }
+        self.top_clubs.each {|club| puts club_stats}
     end
-
 
     def self.most_goals
         league_goals = {}
@@ -119,7 +117,6 @@ class League < ActiveRecord::Base
             league_clean_sheets[league.name] = clean_sheets
         end 
         x = league_clean_sheets.sort_by {|team, cs| cs}.reverse.flatten
-        
     end
     
     def self.display_most_clean_sheets
@@ -128,16 +125,6 @@ class League < ActiveRecord::Base
         header_footer
         puts "It looks like #{x[0]} had the most clean sheets with #{x[1]}--they really have the cleanest sheets!"
         header_footer
-    end
-
-    def most_minutes
-            self.clubs.each do |club|
-                binding.pry
-                club.players.each do |player|
-                binding.pry
-                end
-            end
-
     end
 
 
