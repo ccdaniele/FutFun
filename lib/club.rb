@@ -8,6 +8,7 @@ class Club < ActiveRecord::Base
         Club.all.find_by(name: name)
     end
 
+    
     def club_info
         system "clear"
         header_footer
@@ -66,6 +67,30 @@ class Club < ActiveRecord::Base
     def roster_names
         self.players.each {|player| puts player.name}
     end
+    
+    def club_red_cards   #helper method for #most_red_cards in League
+        cards = 0
+        
+        self.players.each do |player|
+            if !player.red_cards
+                player.red_cards = 0
+            end
+            cards += player.red_cards    
+        end
+        cards
+    end
+
+    def club_specific_data(data)     #helper method for #most_ in League
+        variable = 0
+        self.players.each do |player|
+            if !player.data
+                player.data = 0
+            end
+            variable += player.data     
+        end
+        variable
+    end
+
  
 end
 
