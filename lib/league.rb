@@ -51,9 +51,13 @@ class League < ActiveRecord::Base
 
     def display_standings
         system "clear"
+        n = 1
+        header_footer
         calculate_standings.each do |club, points|
-            puts club.name
+            puts "#{n}. #{club.name}"
+            n += 1
         end
+        header_footer
     end
 
     def top_clubs   # broken for some reason
