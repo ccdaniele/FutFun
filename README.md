@@ -10,3 +10,5 @@ To Populate Database:
 - call create_all(league_array, season), where season is the year (YYYY) of your choice. The database is populated from API-Football, however, which only contains data back to 2010 for most teams.
 
 Note: If populating with a current season, the information will be updated each time the create_all method is called with the argument of the season. 
+
+FutFun video ----->>>> https://youtu.be/1guxK1IcGYY 
